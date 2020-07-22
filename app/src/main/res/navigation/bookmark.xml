@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bookmark"
+    app:startDestination="@id/trendingNewsFragment">
+
+    <fragment
+        android:id="@+id/trendingNewsFragment"
+        android:name="com.techkingsley.newsappcleanarchitecture.framework.presentation.trending.TrendingNewsFragment"
+        android:label="trending_news_fragment"
+        tools:layout="@layout/trending_news_fragment" />
+</navigation>

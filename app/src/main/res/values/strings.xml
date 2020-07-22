@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">NewsAppCleanArchitecture</string>
+    <string name="trending">Trending</string>
+    <string name="news">News</string>
+    <string name="settings">Settings</string>
+    <string name="notification">Notification</string>
+    <string name="search">search</string>
+    <string name="bookmark">Bookmark</string>
+</resources>
