@@ -19,20 +19,16 @@ class TechnologyNewsViewModel @ViewModelInject constructor(private val newsAppRe
     val isNetworkErrorLiveData: LiveData<Boolean>
         get() = _eventNetworkError
 
-    private fun refreshDataFromRepository() {
-        viewModelScope.launch {
-            try {
-                newsAppRepository.refreshTechNews("tech")
-                _eventNetworkError.value = false
-                _eventNetworkError.value = false
+    private fun refreshDataFromRepository() = viewModelScope.launch {
+        try {
+            newsAppRepository.refreshTechNews("tech")
+            _eventNetworkError.value = false
+            _eventNetworkError.value = false
 
-            } catch (networkError: IOException) {
-                // Show a Toast error message and hide the progress bar.
-                if (techNews.value.isNullOrEmpty())
-                    _eventNetworkError.value = true
-            }
+        } catch (networkError: IOException) {
+            // Show a Toast error message and hide the progress bar.
+            if (techNews.value.isNullOrEmpty())
+                _eventNetworkError.value = true
         }
     }
-
-
 }

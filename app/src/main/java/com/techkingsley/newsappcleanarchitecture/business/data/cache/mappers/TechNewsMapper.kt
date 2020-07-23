@@ -10,9 +10,9 @@ class TechNewsMapper @Inject constructor() : EntityMapper<NewsNetworkEntity, Tec
     override fun mapFromEntity(entity: NewsNetworkEntity): TechnologyNews {
         return TechnologyNews(
             author = entity.authorName ?: "",
-            title = entity.title,
-            description = entity.description,
-            newsUrl = entity.newsUrl,
+            title = entity.title ?: "",
+            description = entity.description ?: "",
+            newsUrl = entity.newsUrl ?: "",
             urlToImage = entity.urlToImage ?: ""
         )
     }

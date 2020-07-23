@@ -10,8 +10,8 @@ constructor() : EntityMapper<NewsNetworkEntity, TrendingNews> {
     override fun mapFromEntity(entity: NewsNetworkEntity): TrendingNews {
         return TrendingNews(
             author = entity.authorName ?: "",
-            description = entity.description,
-            newsUrl = entity.newsUrl,
+            description = entity.description ?: "",
+            newsUrl = entity.newsUrl ?: "",
             urlToImage = entity.urlToImage ?: ""
         )
     }

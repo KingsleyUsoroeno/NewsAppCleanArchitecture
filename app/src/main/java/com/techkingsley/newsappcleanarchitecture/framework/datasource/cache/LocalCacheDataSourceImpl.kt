@@ -1,11 +1,10 @@
 package com.techkingsley.newsappcleanarchitecture.framework.datasource.cache
 
 import com.techkingsley.newsappcleanarchitecture.business.data.cache.db.NewsDatabase
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.Movies
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.PoliticalNews
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.TechnologyNews
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.TrendingNews
+import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 
 class LocalCacheDataSourceImpl(private val db: NewsDatabase) : LocalCacheDataSource {
 
@@ -59,6 +58,36 @@ class LocalCacheDataSourceImpl(private val db: NewsDatabase) : LocalCacheDataSou
 
     override fun observeTrendingNews(): Flow<List<TrendingNews>> {
         return db.trendingNewsDao().observeTrendingNews()
+    }
+
+    override suspend fun updateMovieNews(movies: List<Movies>) {
+        db.movieDao().updateMovies(movies)
+    }
+
+    override suspend fun updatePoliticalNews(politicalNews: List<PoliticalNews>) {
+        db.politicalNewsDao().updatePoliticalNews(politicalNews)
+    }
+
+    override suspend fun updateTechNews(techNews: List<TechnologyNews>) {
+        db.techNewsDao().updateTechNews(techNews)
+    }
+
+    override suspend fun updateTrendingNews(trendingNews: List<TrendingNews>) {
+        db.trendingNewsDao().updateTrendingNews(trendingNews)
+    }
+
+    override fun getSearchHistory(): Flow<List<SearchHistory>> {
+        return db.searchHistoryDao().observeSearchHistory()
+    }
+
+    override suspend fun addSearchHistory(searchHistory: SearchHistory) {
+        withContext(Dispatchers.IO) {
+            db.searchHistoryDao().insert(searchHistory)
+        }
+    }
+
+    override suspend fun deleteSearchHistory(searchHistory: SearchHistory) = withContext(Dispatchers.IO) {
+        db.searchHistoryDao().delete(searchHistory)
     }
 
 }

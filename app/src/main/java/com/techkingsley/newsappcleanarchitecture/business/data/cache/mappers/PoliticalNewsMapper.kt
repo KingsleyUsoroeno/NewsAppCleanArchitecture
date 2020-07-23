@@ -10,9 +10,9 @@ class PoliticalNewsMapper @Inject constructor() : EntityMapper<NewsNetworkEntity
     override fun mapFromEntity(entity: NewsNetworkEntity): PoliticalNews {
         return PoliticalNews(
             author = entity.authorName ?: "",
-            title = entity.title,
-            description = entity.description,
-            newsUrl = entity.newsUrl,
+            title = entity.title ?: "",
+            description = entity.description ?: "",
+            newsUrl = entity.newsUrl ?: "",
             urlToImage = entity.urlToImage ?: ""
         )
     }

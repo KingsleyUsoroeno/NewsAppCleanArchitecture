@@ -1,6 +1,7 @@
 package com.techkingsley.newsappcleanarchitecture.business.interactors
 
 import com.techkingsley.newsappcleanarchitecture.business.data.network.retrofit.model.NewsBaseResponse
+import com.techkingsley.newsappcleanarchitecture.business.data.network.retrofit.model.NewsNetworkEntity
 import kotlinx.coroutines.flow.Flow
 
 interface FetchNews {
@@ -12,4 +13,6 @@ interface FetchNews {
     fun fetchPoliticalNews(category: String, from: String, sortBy: String, apiKey: String): Flow<ResultWrapper<NewsBaseResponse>>
 
     fun fetchMovieNews(category: String, from: String, sortBy: String, apiKey: String): Flow<ResultWrapper<NewsBaseResponse>>
+
+    fun searchNews(category: String, from: String, sortBy: String, apiKey: String): Flow<ResultWrapper<List<NewsNetworkEntity>>>
 }

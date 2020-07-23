@@ -2,6 +2,7 @@ package com.techkingsley.newsappcleanarchitecture.business.interactors
 
 import android.util.Log
 import com.techkingsley.newsappcleanarchitecture.business.data.network.retrofit.model.NewsBaseResponse
+import com.techkingsley.newsappcleanarchitecture.business.data.network.retrofit.model.NewsNetworkEntity
 import com.techkingsley.newsappcleanarchitecture.framework.datasource.network.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -27,6 +28,17 @@ class FetchNewsImpl @Inject constructor(private val remoteDataSource: RemoteData
 
     override fun fetchMovieNews(category: String, from: String, sortBy: String, apiKey: String): Flow<ResultWrapper<NewsBaseResponse>> {
         return fetchNewsByCategory(category, from, sortBy, apiKey)
+    }
+
+    override fun searchNews(category: String, from: String, sortBy: String, apiKey: String): Flow<ResultWrapper<List<NewsNetworkEntity>>> = flow {
+        emit(ResultWrapper.Loading)
+        val networkResponse = safeApiResult { remoteDataSource.getNewsByCategory(category, from, sortBy, apiKey) }
+        networkResponse.doIfSuccess { response ->
+            Log.i(TAG, "$category News is $response")
+            emit(ResultWrapper.Success(response.articles))
+        }
+        networkResponse.doIfFailure { emit(ResultWrapper.GenericError(errorResponse = it)) }
+        networkResponse.doIfNetworkException { emit(ResultWrapper.NetworkError(exception = it)) }
     }
 
     private fun fetchNewsByCategory(category: String, from: String, sortBy: String, apiKey: String): Flow<ResultWrapper<NewsBaseResponse>> = flow {

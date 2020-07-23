@@ -10,9 +10,9 @@ class MovieNewsMapper @Inject constructor() : EntityMapper<NewsNetworkEntity, Mo
     override fun mapFromEntity(entity: NewsNetworkEntity): Movies {
         return Movies(
             author = entity.authorName ?: "",
-            title = entity.title,
-            description = entity.description,
-            newsUrl = entity.newsUrl,
+            title = entity.title ?: "",
+            description = entity.description ?: "",
+            newsUrl = entity.newsUrl ?: "",
             urlToImage = entity.urlToImage ?: ""
         )
     }

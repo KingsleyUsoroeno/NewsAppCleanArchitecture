@@ -23,6 +23,4 @@ interface NewsApiService {
         @Query("sortBy") sortBy: String,
         @Query("apiKey") apiKey: String
     ): Response<NewsBaseResponse>
-
-    suspend fun searchNews(query: String)
 }

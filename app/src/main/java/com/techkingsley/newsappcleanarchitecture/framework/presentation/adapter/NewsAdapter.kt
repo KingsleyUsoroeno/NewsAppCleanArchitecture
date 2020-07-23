@@ -77,6 +77,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.BaseViewHolder<*>>() {
         }
     }
 
+    /** Create a Class Called ImageLoader that will be responsible for loading a single news image onto the Screen*/
     inner class TechnologyNewsViewHolder(itemView: View) : BaseViewHolder<TechnologyNews>(itemView) {
         private val newsTitleTextView = itemView.findViewById<TextView>(R.id.newsTitle)
         private val newsImage = itemView.findViewById<AppCompatImageView>(R.id.newsImage)
@@ -90,6 +91,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.BaseViewHolder<*>>() {
                 .setDefaultRequestOptions(requestOptions)
                 .load(item.urlToImage)
                 .placeholder(R.drawable.progress_animation)
+                .error(R.drawable.banner_image)
                 .into(newsImage)
         }
     }
@@ -106,6 +108,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.BaseViewHolder<*>>() {
             Glide.with(newsImage.context)
                 .setDefaultRequestOptions(requestOptions)
                 .load(item.urlToImage)
+                .error(R.drawable.banner_image)
                 .placeholder(R.drawable.progress_animation)
                 .into(newsImage)
         }
@@ -116,13 +119,14 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.BaseViewHolder<*>>() {
         private val newsImage = itemView.findViewById<AppCompatImageView>(R.id.newsImage)
 
         override fun bind(item: PoliticalNews) {
+            //Do your view assignment here from the data model
             newsTitleTextView.text = item.title
             val requestOptions = RequestOptions().transform(RoundedCorners(50)).placeholder(R.drawable.banner_image)
             Glide.with(newsImage.context)
                 .applyDefaultRequestOptions(requestOptions)
                 .load(item.urlToImage)
+                .error(R.drawable.banner_image)
                 .into(newsImage)
-            //Do your view assignment here from the data model
         }
     }
 

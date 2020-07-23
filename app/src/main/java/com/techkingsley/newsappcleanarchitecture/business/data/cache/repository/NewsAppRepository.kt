@@ -4,11 +4,10 @@ import com.techkingsley.newsappcleanarchitecture.business.data.cache.mappers.Mov
 import com.techkingsley.newsappcleanarchitecture.business.data.cache.mappers.PoliticalNewsMapper
 import com.techkingsley.newsappcleanarchitecture.business.data.cache.mappers.TechNewsMapper
 import com.techkingsley.newsappcleanarchitecture.business.data.cache.mappers.TrendingNewsMapper
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.Movies
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.PoliticalNews
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.TechnologyNews
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.TrendingNews
+import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.*
+import com.techkingsley.newsappcleanarchitecture.business.data.network.retrofit.model.NewsNetworkEntity
 import com.techkingsley.newsappcleanarchitecture.business.interactors.FetchNews
+import com.techkingsley.newsappcleanarchitecture.business.interactors.ResultWrapper
 import com.techkingsley.newsappcleanarchitecture.business.interactors.doIfSuccess
 import com.techkingsley.newsappcleanarchitecture.framework.datasource.cache.LocalCacheDataSource
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +41,7 @@ class NewsAppRepository constructor(
     override suspend fun refreshTechNews(category: String) = withContext(Dispatchers.IO) {
         fetchNews.fetchTechnologicalNews(category, from, SORT_BY, API_KEY).collect {
             it.doIfSuccess { news ->
-                localCacheDataSource.insertAllTechnologyNews(techNewsMapper.mapFromEntityList(news.articles))
+                localCacheDataSource.updateTechNews(techNewsMapper.mapFromEntityList(news.articles))
             }
         }
     }
@@ -50,7 +49,7 @@ class NewsAppRepository constructor(
     override suspend fun refreshTrendingNews(category: String) = withContext(Dispatchers.IO) {
         fetchNews.fetchTrendingNews(category, from, SORT_BY, API_KEY).collect {
             it.doIfSuccess { news ->
-                localCacheDataSource.insertAllTrendingNews(trendingNewsMapper.mapFromEntityList(news.articles))
+                localCacheDataSource.updateTrendingNews(trendingNewsMapper.mapFromEntityList(news.articles))
             }
         }
     }
@@ -58,7 +57,7 @@ class NewsAppRepository constructor(
     override suspend fun refreshPoliticalNews(category: String) = withContext(Dispatchers.IO) {
         fetchNews.fetchPoliticalNews(category, from, SORT_BY, API_KEY).collect {
             it.doIfSuccess { news ->
-                localCacheDataSource.insertAllPoliticalNews(politicalNewsMapper.mapFromEntityList(news.articles))
+                localCacheDataSource.updatePoliticalNews(politicalNewsMapper.mapFromEntityList(news.articles))
             }
         }
     }
@@ -66,7 +65,7 @@ class NewsAppRepository constructor(
     override suspend fun refreshMovieNews(category: String) = withContext(Dispatchers.IO) {
         fetchNews.fetchPoliticalNews(category, from, SORT_BY, API_KEY).collect {
             it.doIfSuccess { news ->
-                localCacheDataSource.insertAllMovieNews(movieNewsMapper.mapFromEntityList(news.articles))
+                localCacheDataSource.updateMovieNews(movieNewsMapper.mapFromEntityList(news.articles))
             }
         }
     }
@@ -85,5 +84,22 @@ class NewsAppRepository constructor(
 
     override fun getTrendingNews(): Flow<List<TrendingNews>> {
         return localCacheDataSource.observeTrendingNews()
+    }
+
+    override fun getSearchHistory(): Flow<List<SearchHistory>> {
+        return localCacheDataSource.getSearchHistory()
+    }
+
+    override suspend fun addSearchHistory(searchHistory: SearchHistory) {
+        localCacheDataSource.addSearchHistory(searchHistory)
+    }
+
+    override suspend fun deleteSearchHistory(searchHistory: SearchHistory) {
+        localCacheDataSource.deleteSearchHistory(searchHistory)
+    }
+
+    /*Map these out to a different entity object*/
+    override suspend fun searchNews(query: String): Flow<ResultWrapper<List<NewsNetworkEntity>>> {
+        return fetchNews.searchNews(query, from, SORT_BY, API_KEY)
     }
 }

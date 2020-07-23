@@ -20,7 +20,7 @@ class RemoteDataSourceImpl(private val newsApiService: NewsApiService) : RemoteD
     }
 
     override suspend fun searchNews(query: String) {
-        return newsApiService.searchNews(query)
+        //newsApiService.searchNews(query)
     }
 
 }

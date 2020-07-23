@@ -98,4 +98,8 @@ dependencies {
     def glide = "4.11.0"
     implementation "com.github.bumptech.glide:glide:$glide"
     kapt "com.github.bumptech.glide:compiler:$glide"
+
+
+    // SEARCH_VIEW
+    implementation 'com.miguelcatalan:materialsearchview:1.4.0'
 }

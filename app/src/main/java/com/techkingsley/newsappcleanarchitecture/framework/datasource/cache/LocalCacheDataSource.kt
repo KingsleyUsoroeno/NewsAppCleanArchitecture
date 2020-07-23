@@ -1,9 +1,6 @@
 package com.techkingsley.newsappcleanarchitecture.framework.datasource.cache
 
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.Movies
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.PoliticalNews
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.TechnologyNews
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.TrendingNews
+import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.*
 import kotlinx.coroutines.flow.Flow
 
 interface LocalCacheDataSource {
@@ -33,5 +30,19 @@ interface LocalCacheDataSource {
     fun observeMovieNews(): Flow<List<Movies>>
 
     fun observeTrendingNews(): Flow<List<TrendingNews>>
+
+    suspend fun updateMovieNews(movies: List<Movies>)
+
+    suspend fun updatePoliticalNews(politicalNews: List<PoliticalNews>)
+
+    suspend fun updateTechNews(techNews: List<TechnologyNews>)
+
+    suspend fun updateTrendingNews(trendingNews: List<TrendingNews>)
+
+    fun getSearchHistory(): Flow<List<SearchHistory>>
+
+    suspend fun addSearchHistory(searchHistory: SearchHistory)
+
+    suspend fun deleteSearchHistory(searchHistory: SearchHistory)
 
 }

@@ -6,4 +6,6 @@
     <string name="notification">Notification</string>
     <string name="search">search</string>
     <string name="bookmark">Bookmark</string>
+    <string name="search_hint">Search for news categories e.g politics</string>
+    <string name="app_label">NewsApp</string>
 </resources>

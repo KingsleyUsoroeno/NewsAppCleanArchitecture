@@ -1,9 +1,8 @@
-package com.techkingsley.newsappcleanarchitecture.business.data.network.retrofit.model
+package com.techkingsley.newsappcleanarchitecture.business.data.cache.model
 
 import com.google.gson.annotations.SerializedName
 
-data class NewsNetworkEntity(
-    @SerializedName("author")
+data class SearchResult(
     val authorName: String?,
 
     val title: String?,

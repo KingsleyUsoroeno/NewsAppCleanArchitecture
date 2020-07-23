@@ -1,16 +1,12 @@
 package com.techkingsley.newsappcleanarchitecture.framework.presentation
 
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.techkingsley.newsappcleanarchitecture.R
-import com.techkingsley.newsappcleanarchitecture.business.domain.state.DataState
 import com.techkingsley.newsappcleanarchitecture.databinding.ActivityMainBinding
 import com.techkingsley.newsappcleanarchitecture.framework.presentation.utils.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,7 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    private val viewModel: MainViewModel by viewModels()
 
     private lateinit var viewBinding: ActivityMainBinding
     private lateinit var bottomNavigationView: BottomNavigationView
@@ -34,9 +29,6 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         } // Else, need to wait for onRestoreInstanceState
-
-        //viewModel.fetchTrendingNews()
-        subscribeObservers()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -45,27 +37,6 @@ class MainActivity : AppCompatActivity() {
         // and its selectedItemId, we can proceed with setting up the
         // BottomNavigationBar with Navigation
         setupBottomNavigationBar()
-    }
-
-    private fun subscribeObservers() {
-        viewModel.dataState.observe(this, Observer { dataState ->
-            when (dataState) {
-                is DataState.Success -> {
-                    Log.i("MainActivity", "observers ${dataState.data}")
-                }
-
-                is DataState.Error -> {
-
-                }
-                is DataState.Loading -> {
-
-                }
-            }
-        })
-
-        viewModel.dataState.observe(this, Observer {
-
-        })
     }
 
     override fun onSupportNavigateUp(): Boolean {
