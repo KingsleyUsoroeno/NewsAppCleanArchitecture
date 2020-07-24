@@ -3,7 +3,7 @@
 
 ## Installation
 NewsAppCleanArchitecture is my playground and defination on how to go about building a modern day android Application following best practises such as a clean Architecture and 
-making use of todays jetpack libraries, it requires a  minimum API level of 16, feel free to clone the repository a shoot in a PR if you feel like something has or a pattern has been done
+making use of todays jetpack libraries, it requires a  minimum API level of 16, feel free to clone the repository and shoot in a PR if you feel like something has or a pattern has been done
 wrong.
 The App Makes use of some of the most popular Jetpack libraries which has been listed below
 
