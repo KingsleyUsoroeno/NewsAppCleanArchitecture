@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.techkingsley.newsappcleanarchitecture.R
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.TechnologyNews
+import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.News
 import com.techkingsley.newsappcleanarchitecture.databinding.TechnologyNewsFragmentBinding
 import com.techkingsley.newsappcleanarchitecture.framework.presentation.adapter.NewsAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,9 +41,9 @@ class TechnologyNewsFragment : Fragment(R.layout.technology_news_fragment) {
         })
     }
 
-    private fun buildRecyclerView(item: List<TechnologyNews>) {
+    private fun buildRecyclerView(item: List<News>) {
         val adapter = NewsAdapter()
-        adapter.setItem(item)
+        adapter.submitList(item)
         viewBinding.technologyNewsRecyclerView.adapter = adapter
     }
 }

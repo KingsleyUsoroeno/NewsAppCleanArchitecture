@@ -2,16 +2,15 @@ package com.techkingsley.newsappcleanarchitecture.business.data.cache.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.dao.*
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.*
+import com.techkingsley.newsappcleanarchitecture.business.data.cache.dao.NewsDao
+import com.techkingsley.newsappcleanarchitecture.business.data.cache.dao.SearchHistoryDao
+import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.News
+import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.SearchHistory
 
-@Database(entities = [TechnologyNews::class, TrendingNews::class, PoliticalNews::class, Movies::class, SearchHistory::class], version = 1)
+@Database(entities = [News::class, SearchHistory::class], version = 1)
 abstract class NewsDatabase : RoomDatabase() {
 
-    abstract fun techNewsDao(): TechnologyNewsDao
-    abstract fun trendingNewsDao(): TrendingNewsDao
-    abstract fun politicalNewsDao(): PoliticalNewsDao
-    abstract fun movieDao(): MovieNewsDao
+    abstract fun newsDao(): NewsDao
     abstract fun searchHistoryDao(): SearchHistoryDao
 
     companion object {

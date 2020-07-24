@@ -12,3 +12,4 @@
 /captures
 .externalNativeBuild
 .cxx
+app/src/main/java/com/techkingsley/newsappcleanarchitecture/framework/Secret.kt

@@ -9,7 +9,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.miguelcatalan.materialsearchview.MaterialSearchView
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.SearchHistory
@@ -53,7 +52,6 @@ class SearchActivity : AppCompatActivity(), SearchHistoryAdapter.OnItemClickedLi
         val mVoiceSearchButton = searchView.findViewById<ImageView>(R.id.action_voice_btn)
         val mEmptyButton = searchView.findViewById<ImageView>(R.id.action_empty_btn)
         mSearchViewEdt = searchView.findViewById(R.id.searchTextView)
-
         mVoiceSearchButton.visibility = View.GONE
 
         mEmptyButton.setOnClickListener { view ->
@@ -71,19 +69,25 @@ class SearchActivity : AppCompatActivity(), SearchHistoryAdapter.OnItemClickedLi
                 searchHistoryAdapter = SearchHistoryAdapter(this)
                 searchHistoryAdapter.setSearchResults(it)
                 activityViewBinding.recyclerSearchHistory.adapter = searchHistoryAdapter
-                activityViewBinding.recyclerSearchHistory.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
             }
         })
 
-        searchViewModel.news.observe(this, Observer { news ->
-            news?.let {
-                Log.i(TAG, "News Network Entity is $it")
+        searchViewModel.searchResult.observe(this, Observer { news ->
+            if (news.isNullOrEmpty().not()) {
+                Log.i(TAG, "News Network Entity is $news")
                 searchResultAdapter = SearchResultAdapter(this)
-                searchResultAdapter.setSearchResults(it)
+                searchResultAdapter.setSearchResults(news)
                 activityViewBinding.recyclerSearchResults.adapter = searchResultAdapter
-                activityViewBinding.recyclerSearchResults.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+                //activityViewBinding.recyclerSearchResults.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
                 searchView.hideKeyboard(searchView)
+            } else {
+                // Failed to fetch the news from the server due to a server failure or low internet connection
+                Log.i(TAG, "Failed to fetch users news")
             }
+        })
+
+        searchViewModel.errorState.observe(this, Observer {
+
         })
 
         searchView.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
@@ -91,7 +95,8 @@ class SearchActivity : AppCompatActivity(), SearchHistoryAdapter.OnItemClickedLi
                 Log.i(TAG, "query text submitted is $query")
                 val searchHistory = SearchHistory(searchTitle = query)
                 searchViewModel.addSearchHistory(searchHistory)
-                searchViewModel.queryChannel.offer(query)
+                searchViewModel.fetchNews(query) { searchView.hideKeyboard(searchView) }
+                //searchViewModel.queryChannel.offer(query)
                 return true
             }
 
@@ -116,6 +121,7 @@ class SearchActivity : AppCompatActivity(), SearchHistoryAdapter.OnItemClickedLi
         Log.i(TAG, "I clicked on my previous history $searchHistory")
         // Comment if you don't want the searchView to show the user the previous search result as the current search keyword on the searchView
         mSearchViewEdt.setText(searchHistory.searchTitle)
+        searchViewModel.fetchNews(searchHistory.searchTitle) { searchView.hideKeyboard(searchView) }
     }
 
     override fun onDeleteSearchHistoryClicked(searchHistory: SearchHistory) {

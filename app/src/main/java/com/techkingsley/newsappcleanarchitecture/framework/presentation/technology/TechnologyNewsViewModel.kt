@@ -8,7 +8,11 @@ import java.io.IOException
 
 class TechnologyNewsViewModel @ViewModelInject constructor(private val newsAppRepository: NewsAppRepository) : ViewModel() {
 
-    val techNews = newsAppRepository.getTechNews().asLiveData()
+    companion object {
+        private const val NEWS_CATEGORY = "tech"
+    }
+
+    val techNews = newsAppRepository.observeAllNews(NEWS_CATEGORY).asLiveData()
 
     private var _eventNetworkError = MutableLiveData<Boolean>()
 
@@ -21,7 +25,7 @@ class TechnologyNewsViewModel @ViewModelInject constructor(private val newsAppRe
 
     private fun refreshDataFromRepository() = viewModelScope.launch {
         try {
-            newsAppRepository.refreshTechNews("tech")
+            newsAppRepository.refreshTechNews(NEWS_CATEGORY)
             _eventNetworkError.value = false
             _eventNetworkError.value = false
 

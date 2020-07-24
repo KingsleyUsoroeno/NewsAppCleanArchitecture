@@ -2,10 +2,7 @@ package com.techkingsley.newsappcleanarchitecture.di
 
 import android.content.Context
 import androidx.room.Room
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.dao.MovieNewsDao
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.dao.PoliticalNewsDao
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.dao.TechnologyNewsDao
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.dao.TrendingNewsDao
+import com.techkingsley.newsappcleanarchitecture.business.data.cache.dao.NewsDao
 import com.techkingsley.newsappcleanarchitecture.business.data.cache.db.NewsDatabase
 import com.techkingsley.newsappcleanarchitecture.framework.datasource.cache.LocalCacheDataSource
 import com.techkingsley.newsappcleanarchitecture.framework.datasource.cache.LocalCacheDataSourceImpl
@@ -31,7 +28,7 @@ object CacheModule {
             .build()
     }
 
-    @Singleton
+    /*@Singleton
     @Provides
     fun provideTrendNewsDAO(newsDatabase: NewsDatabase): TrendingNewsDao {
         return newsDatabase.trendingNewsDao()
@@ -47,12 +44,12 @@ object CacheModule {
     @Provides
     fun provideTechNewsDao(newsDatabase: NewsDatabase): TechnologyNewsDao {
         return newsDatabase.techNewsDao()
-    }
+    }*/
 
     @Singleton
     @Provides
-    fun provideMovieNewsDao(newsDatabase: NewsDatabase): MovieNewsDao {
-        return newsDatabase.movieDao()
+    fun provideNewsDao(newsDatabase: NewsDatabase): NewsDao {
+        return newsDatabase.newsDao()
     }
 
     @Singleton

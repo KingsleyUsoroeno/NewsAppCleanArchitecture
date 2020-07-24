@@ -42,7 +42,7 @@ class SearchHistoryAdapter(private val onItemClickedListener: OnItemClickedListe
         private val textView = itemView.findViewById<AppCompatTextView>(R.id.textViewSearchQuery)
         private val imageView = itemView.findViewById<AppCompatImageView>(R.id.imgDelete)
 
-        private val view = itemView
+        private val view = itemView.rootView
 
         fun updateSearchHistory(searchHistory: SearchHistory) {
             textView.text = searchHistory.searchTitle

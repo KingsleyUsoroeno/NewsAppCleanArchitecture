@@ -1,22 +1,24 @@
 package com.techkingsley.newsappcleanarchitecture.business.data.cache.mappers
 
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.TrendingNews
+import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.News
 import com.techkingsley.newsappcleanarchitecture.business.data.network.retrofit.model.NewsNetworkEntity
 import com.techkingsley.newsappcleanarchitecture.business.domain.util.EntityMapper
 import javax.inject.Inject
 
-class TrendingNewsMapper @Inject
-constructor() : EntityMapper<NewsNetworkEntity, TrendingNews> {
-    override fun mapFromEntity(entity: NewsNetworkEntity): TrendingNews {
-        return TrendingNews(
+class NewsMapper @Inject constructor() : EntityMapper<NewsNetworkEntity, News> {
+
+    override fun mapFromEntity(category: String, entity: NewsNetworkEntity): News {
+        return News(
+            category = category,
             author = entity.authorName ?: "",
+            title = entity.title ?: "",
             description = entity.description ?: "",
             newsUrl = entity.newsUrl ?: "",
             urlToImage = entity.urlToImage ?: ""
         )
     }
 
-    override fun mapToEntity(domainModel: TrendingNews): NewsNetworkEntity {
+    override fun mapToEntity(domainModel: News): NewsNetworkEntity {
         return NewsNetworkEntity(
             authorName = domainModel.author,
             title = domainModel.title,
@@ -26,7 +28,7 @@ constructor() : EntityMapper<NewsNetworkEntity, TrendingNews> {
         )
     }
 
-    fun mapFromEntityList(entities: List<NewsNetworkEntity>): List<TrendingNews> {
-        return entities.map { mapFromEntity(it) }
+    fun mapFromEntityList(category: String, entities: List<NewsNetworkEntity>): List<News> {
+        return entities.map { mapFromEntity(category, it) }
     }
 }

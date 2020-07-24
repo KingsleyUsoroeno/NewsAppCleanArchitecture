@@ -1,6 +1,7 @@
 package com.techkingsley.newsappcleanarchitecture.business.data.cache.repository
 
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.*
+import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.News
+import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.SearchHistory
 import com.techkingsley.newsappcleanarchitecture.business.data.network.retrofit.model.NewsNetworkEntity
 import com.techkingsley.newsappcleanarchitecture.business.interactors.ResultWrapper
 import kotlinx.coroutines.flow.Flow
@@ -15,15 +16,9 @@ interface INewsAppRepository {
 
     suspend fun refreshMovieNews(category: String)
 
-    fun getTechNews(): Flow<List<TechnologyNews>>
-
-    fun getPoliticalNews(): Flow<List<PoliticalNews>>
-
-    fun getMovieNews(): Flow<List<Movies>>
-
-    fun getTrendingNews(): Flow<List<TrendingNews>>
-
     fun getSearchHistory(): Flow<List<SearchHistory>>
+
+    fun observeAllNews(category: String): Flow<List<News>>
 
     suspend fun addSearchHistory(searchHistory: SearchHistory)
 
