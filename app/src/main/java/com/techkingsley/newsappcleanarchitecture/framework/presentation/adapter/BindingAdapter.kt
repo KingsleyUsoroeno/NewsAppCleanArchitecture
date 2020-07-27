@@ -3,12 +3,18 @@ package com.techkingsley.newsappcleanarchitecture.framework.presentation.adapter
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.LiveData
 import com.bumptech.glide.Glide
 import com.techkingsley.newsappcleanarchitecture.R
 
 @BindingAdapter("goneIfNotNull")
 fun goneIfNotNull(view: View, it: Any?) {
     view.visibility = if (it != null) View.GONE else View.VISIBLE
+}
+
+@BindingAdapter("goneIfNotNull")
+fun showOrDismissProgressbar(view: View, it: LiveData<Any?>) {
+    view.visibility = if (it.value == null) View.VISIBLE else View.GONE
 }
 
 @BindingAdapter("imageUrl")
