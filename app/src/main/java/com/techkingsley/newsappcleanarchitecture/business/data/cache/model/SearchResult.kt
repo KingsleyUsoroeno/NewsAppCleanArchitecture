@@ -8,8 +8,7 @@ data class SearchResult(
     val title: String?,
 
     val description: String?,
-
-    @SerializedName("url")
+    
     val newsUrl: String?,
 
     val urlToImage: String?

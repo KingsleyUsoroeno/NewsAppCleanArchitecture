@@ -37,12 +37,12 @@ Which encapsulates the apps core features with business handling most of the App
 ### Screenshots
 
 <p float="left">
-  <img src="https://github.com/KingsleyUsoroeno/NewsAppCleanArchitecture/blob/kius/support/refactor-news-model/app/src/main/res/screenshots/book_mark_screen.png" width="300" />
-  <img src="https://github.com/KingsleyUsoroeno/NewsAppCleanArchitecture/blob/kius/support/refactor-news-model/app/src/main/res/screenshots/home_screen.png" width="300" /> 
-  <img src="https://github.com/KingsleyUsoroeno/NewsAppCleanArchitecture/blob/kius/support/refactor-news-model/app/src/main/res/screenshots/search_loading_screen.png"   width="300" />
+  <img src="https://github.com/KingsleyUsoroeno/NewsAppCleanArchitecture/blob/kius/support/refactor-news-model/screenshots/book_mark_screen.png" width="300" />
+  <img src="https://github.com/KingsleyUsoroeno/NewsAppCleanArchitecture/blob/kius/support/refactor-news-model/screenshots/home_screen.png" width="300" /> 
+  <img src="https://github.com/KingsleyUsoroeno/NewsAppCleanArchitecture/blob/kius/support/refactor-news-model/screenshots/search_loading_screen.png"   width="300" />
 </p>
 
 <p float="left">
-  <img src="https://github.com/KingsleyUsoroeno/NewsAppCleanArchitecture/blob/kius/support/refactor-news-model/app/src/main/res/screenshots/search_loading_screen.png" />
-  <img src="https://github.com/KingsleyUsoroeno/NewsAppCleanArchitecture/blob/kius/support/refactor-news-model/app/src/main/res/screenshots/news_search_result.png" />
+  <img src="https://github.com/KingsleyUsoroeno/NewsAppCleanArchitecture/blob/kius/support/refactor-news-model/screenshots/search_loading_screen.png" width="300"  />
+  <img src="https://github.com/KingsleyUsoroeno/NewsAppCleanArchitecture/blob/kius/support/refactor-news-model/screenshots/news_search_result.png" width="300"  />
 </p>

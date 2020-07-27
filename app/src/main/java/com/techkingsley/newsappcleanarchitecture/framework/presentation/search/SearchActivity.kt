@@ -67,8 +67,8 @@ class SearchActivity : AppCompatActivity(), SearchHistoryAdapter.OnItemClickedLi
         searchViewModel.allSearchHistory.observe(this, Observer {
             it?.let {
                 searchHistoryAdapter = SearchHistoryAdapter(this)
-                searchHistoryAdapter.setSearchResults(it)
                 activityViewBinding.recyclerSearchHistory.adapter = searchHistoryAdapter
+                searchHistoryAdapter.setSearchResults(it)
             }
         })
 

@@ -1,13 +1,11 @@
 package com.techkingsley.newsappcleanarchitecture.framework.presentation.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.SearchHistory
+import com.techkingsley.newsappcleanarchitecture.databinding.LayoutSearchHistoryBinding
 
 
 class SearchHistoryAdapter(private val onItemClickedListener: OnItemClickedListener) : RecyclerView.Adapter<SearchHistoryAdapter.SearchHistoryViewHolder>() {
@@ -20,8 +18,9 @@ class SearchHistoryAdapter(private val onItemClickedListener: OnItemClickedListe
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHistoryViewHolder {
-        val v: View = LayoutInflater.from(parent.context).inflate(R.layout.row_search_history, parent, false)
-        return SearchHistoryViewHolder(v)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_search_history, parent, false)
+        val viewBinding = LayoutSearchHistoryBinding.bind(view)
+        return SearchHistoryViewHolder(viewBinding)
     }
 
     override fun getItemCount(): Int {
@@ -37,17 +36,13 @@ class SearchHistoryAdapter(private val onItemClickedListener: OnItemClickedListe
         holder.updateSearchHistory(searchHistoryList[position])
     }
 
-    inner class SearchHistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        private val textView = itemView.findViewById<AppCompatTextView>(R.id.textViewSearchQuery)
-        private val imageView = itemView.findViewById<AppCompatImageView>(R.id.imgDelete)
-
-        private val view = itemView.rootView
+    inner class SearchHistoryViewHolder(private val viewBinding: LayoutSearchHistoryBinding) : RecyclerView.ViewHolder(viewBinding.root) {
 
         fun updateSearchHistory(searchHistory: SearchHistory) {
-            textView.text = searchHistory.searchTitle
-            view.setOnClickListener { onItemClickedListener.onSearchHistoryClicked(searchHistory) }
-            imageView.setOnClickListener { onItemClickedListener.onDeleteSearchHistoryClicked(searchHistory) }
+            viewBinding.searchHistory = searchHistory
+            viewBinding.onItemClickListener = onItemClickedListener
+            viewBinding.root.setOnClickListener { onItemClickedListener.onSearchHistoryClicked(searchHistory) }
+            viewBinding.executePendingBindings()
         }
     }
 }
