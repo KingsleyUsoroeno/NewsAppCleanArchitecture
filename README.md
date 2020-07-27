@@ -3,8 +3,9 @@
 
 ## Installation
 NewsAppCleanArchitecture is my playground and defination on how to go about building a modern day android Application following best practises such as a clean Architecture and 
-making use of todays jetpack libraries, it requires a  minimum API level of 16, feel free to clone the repository and shoot in a PR if you feel like something has or a pattern has been done
-wrong.
+making use of todays jetpack libraries, it requires a  minimum API level of 16, feel free to clone the repository and shoot in a PR if you feel like something has or a pattern has been done wrong. The App makes use of the [NewsApi](https://newsapi.org/) for fetching news from its remote counterpart, please ensure to create an API KEY by signing up and then create a `kotlin file/object called Secret in the root directory of the framework package` and create a public Constant like these
+`const val API_KEY = "YOUR OWN API KEY HERE" in order to run the App.`
+
 The App Makes use of some of the most popular Jetpack libraries which has been listed below
 
 ## Libraries Used
