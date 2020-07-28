@@ -8,7 +8,11 @@ import java.io.IOException
 
 class TrendingNewsViewModel @ViewModelInject constructor(private val newsAppRepository: NewsAppRepository) : ViewModel() {
 
-    val trendingNews = newsAppRepository.observeAllNews("trending").asLiveData()
+    companion object {
+        const val NEWS_CATEGORY = "trending"
+    }
+
+    val trendingNews = newsAppRepository.observeAllNews(NEWS_CATEGORY).asLiveData()
 
     private var _eventNetworkError = MutableLiveData<Boolean>()
 

@@ -9,7 +9,7 @@ import java.io.IOException
 class MovieViewModel @ViewModelInject constructor(private val newsAppRepository: NewsAppRepository) : ViewModel() {
 
     companion object {
-        private const val NEWS_CATEGORY = "movies"
+        const val NEWS_CATEGORY = "movies"
     }
 
     val movieNews = newsAppRepository.observeAllNews(NEWS_CATEGORY).asLiveData()

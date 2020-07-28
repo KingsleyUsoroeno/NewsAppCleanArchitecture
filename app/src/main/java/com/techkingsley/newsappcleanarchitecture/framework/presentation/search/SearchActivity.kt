@@ -75,6 +75,8 @@ class SearchActivity : AppCompatActivity(), SearchHistoryAdapter.OnItemClickedLi
         searchViewModel.searchResult.observe(this, Observer { news ->
             if (news.isNullOrEmpty().not()) {
                 Log.i(TAG, "News Network Entity is $news")
+                activityViewBinding.textViewNewsException.visibility = View.GONE
+                activityViewBinding.recyclerSearchResults.visibility = View.VISIBLE
                 searchResultAdapter = SearchResultAdapter(this)
                 searchResultAdapter.setSearchResults(news)
                 activityViewBinding.recyclerSearchResults.adapter = searchResultAdapter
@@ -83,6 +85,8 @@ class SearchActivity : AppCompatActivity(), SearchHistoryAdapter.OnItemClickedLi
             } else {
                 // Failed to fetch the news from the server due to a server failure or low internet connection
                 Log.i(TAG, "Failed to fetch users news")
+                activityViewBinding.textViewNewsException.visibility = View.VISIBLE
+                activityViewBinding.recyclerSearchResults.visibility = View.GONE
             }
         })
 

@@ -9,7 +9,7 @@ import java.io.IOException
 class PoliticalNewsViewModel @ViewModelInject constructor(private val newsAppRepository: NewsAppRepository) : ViewModel() {
 
     companion object {
-        private const val NEWS_CATEGORY = "politics"
+        const val NEWS_CATEGORY = "politics"
     }
 
     val politicalNews = newsAppRepository.observeAllNews(NEWS_CATEGORY).asLiveData()

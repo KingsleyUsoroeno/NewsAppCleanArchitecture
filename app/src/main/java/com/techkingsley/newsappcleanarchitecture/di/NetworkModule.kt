@@ -40,17 +40,6 @@ object NetworkModule {
         }
 
         val httpClient = OkHttpClient.Builder()
-        /*httpClient.addInterceptor { chain ->
-            val original = chain.request()
-
-            // Request customization: add request headers
-            val requestBuilder = original.newBuilder()
-                .header("Authorization", "ca4ae9f450a44a39bd7b77f9a8745450") // <-- this is the important line
-
-            val request = requestBuilder.build()
-            chain.proceed(request)
-        }*/
-
         httpClient.connectTimeout(30, TimeUnit.SECONDS)
         httpClient.readTimeout(30, TimeUnit.SECONDS)
         httpClient.addInterceptor(logging)
@@ -82,20 +71,6 @@ object NetworkModule {
         return NewsAppRepository(fetchNews = fetchNews, localCacheDataSource = localCacheDataSource)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

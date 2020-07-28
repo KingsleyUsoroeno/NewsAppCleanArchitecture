@@ -77,6 +77,9 @@ class SearchActivityViewModel @ViewModelInject constructor(private val newsAppRe
             // Log Error
         }.asLiveData()*/
 
+    /** Use to Query News From the local database base on the news category passed in */
+    fun observeNews(query: String) = newsAppRepository.observeAllNews(query).asLiveData()
+
     /*its a good practise to log the error and provide the user with a feedback on the UI*/
     fun fetchNews(query: String, hideKeyBoard: () -> Unit) {
         viewModelScope.launch {
@@ -90,6 +93,7 @@ class SearchActivityViewModel @ViewModelInject constructor(private val newsAppRe
 
                 result.doIfFailure { error ->
                     _loadingStateLiveData.value = false
+                    //_searchResult.value = observeNews(query).value
                     _searchResult.value = emptyList()
                     Log.i(TAG, "failed to fetch news query due to server error of $error")
                 }

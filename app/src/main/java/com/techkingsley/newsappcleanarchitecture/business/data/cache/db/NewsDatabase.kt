@@ -7,7 +7,7 @@ import com.techkingsley.newsappcleanarchitecture.business.data.cache.dao.SearchH
 import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.News
 import com.techkingsley.newsappcleanarchitecture.business.data.cache.model.SearchHistory
 
-@Database(entities = [News::class, SearchHistory::class], version = 1)
+@Database(entities = [News::class, SearchHistory::class], version = 1, exportSchema = false)
 abstract class NewsDatabase : RoomDatabase() {
 
     abstract fun newsDao(): NewsDao
