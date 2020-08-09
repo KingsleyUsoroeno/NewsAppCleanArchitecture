@@ -10,18 +10,13 @@ import com.techkingsley.newsappcleanarchitecture.business.interactors.ResultWrap
 import com.techkingsley.newsappcleanarchitecture.business.interactors.doIfFailure
 import com.techkingsley.newsappcleanarchitecture.business.interactors.doIfNetworkException
 import com.techkingsley.newsappcleanarchitecture.business.interactors.doIfSuccess
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 private const val SEARCH_DELAY_MILLIS = 500L
 private const val MIN_QUERY_LENGTH = 2
 
-@ExperimentalCoroutinesApi
-@FlowPreview
+
 class SearchActivityViewModel @ViewModelInject constructor(private val newsAppRepository: NewsAppRepository) : ViewModel() {
 
     companion object {
@@ -38,7 +33,7 @@ class SearchActivityViewModel @ViewModelInject constructor(private val newsAppRe
         newsAppRepository.deleteSearchHistory(searchHistory)
     }
 
-    val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
+    //val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
 
     private val _loadingStateLiveData = MutableLiveData<Boolean>(false)
 
@@ -88,12 +83,11 @@ class SearchActivityViewModel @ViewModelInject constructor(private val newsAppRe
             newsAppRepository.searchNews(query).collect { result: ResultWrapper<List<NewsNetworkEntity>> ->
                 result.doIfSuccess {
                     _loadingStateLiveData.value = false
-                    _searchResult.value = it
+                    if (it.isNotEmpty()) _searchResult.value = it else _searchResult.value = emptyList()
                 }
 
                 result.doIfFailure { error ->
                     _loadingStateLiveData.value = false
-                    //_searchResult.value = observeNews(query).value
                     _searchResult.value = emptyList()
                     Log.i(TAG, "failed to fetch news query due to server error of $error")
                 }

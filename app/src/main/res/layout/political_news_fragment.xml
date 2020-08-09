@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="politicalNewsViewModel"
             type="com.techkingsley.newsappcleanarchitecture.framework.presentation.politics.PoliticalNewsViewModel" />

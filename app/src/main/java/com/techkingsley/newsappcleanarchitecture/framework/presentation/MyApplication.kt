@@ -38,9 +38,9 @@ class MyApplication : Application() {
 
     private fun setupRecurringWork() {
         val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresBatteryNotLow(true)
-            .setRequiresCharging(true)
+            /*.setRequiresCharging(true)*/ // Uncomment if you want to constrained the device to be charging before these constraint is met
             .apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     setRequiresDeviceIdle(true)

@@ -17,13 +17,9 @@ import com.techkingsley.newsappcleanarchitecture.databinding.ActivitySearchBindi
 import com.techkingsley.newsappcleanarchitecture.framework.presentation.adapter.SearchHistoryAdapter
 import com.techkingsley.newsappcleanarchitecture.framework.presentation.adapter.SearchResultAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 
 
 @AndroidEntryPoint
-@FlowPreview
-@ExperimentalCoroutinesApi
 class SearchActivity : AppCompatActivity(), SearchHistoryAdapter.OnItemClickedListener, SearchResultAdapter.OnItemClickedListener {
 
     private lateinit var activityViewBinding: ActivitySearchBinding
@@ -66,29 +62,35 @@ class SearchActivity : AppCompatActivity(), SearchHistoryAdapter.OnItemClickedLi
 
         searchViewModel.allSearchHistory.observe(this, Observer {
             it?.let {
+                activityViewBinding.textViewNewsException.visibility = View.GONE
                 searchHistoryAdapter = SearchHistoryAdapter(this)
                 activityViewBinding.recyclerSearchHistory.adapter = searchHistoryAdapter
                 searchHistoryAdapter.setSearchResults(it)
             }
         })
 
+        searchViewModel.loadingState.observe(this, Observer {
+            if (it) activityViewBinding.recyclerSearchResults.visibility = View.GONE
+        })
+
         searchViewModel.searchResult.observe(this, Observer { news ->
-            if (news.isNullOrEmpty().not()) {
+            if (news.isNullOrEmpty()) {
+                // Failed to fetch the news from the server due to a server failure or low internet connection
+                Log.i(TAG, "Failed to fetch users news")
+                activityViewBinding.textViewNewsException.visibility = View.VISIBLE
+                activityViewBinding.recyclerSearchResults.visibility = View.GONE
+
+            } else {
                 Log.i(TAG, "News Network Entity is $news")
                 activityViewBinding.textViewNewsException.visibility = View.GONE
                 activityViewBinding.recyclerSearchResults.visibility = View.VISIBLE
                 searchResultAdapter = SearchResultAdapter(this)
                 searchResultAdapter.setSearchResults(news)
                 activityViewBinding.recyclerSearchResults.adapter = searchResultAdapter
-                //activityViewBinding.recyclerSearchResults.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
                 searchView.hideKeyboard(searchView)
-            } else {
-                // Failed to fetch the news from the server due to a server failure or low internet connection
-                Log.i(TAG, "Failed to fetch users news")
-                activityViewBinding.textViewNewsException.visibility = View.VISIBLE
-                activityViewBinding.recyclerSearchResults.visibility = View.GONE
             }
         })
+
 
         searchViewModel.errorState.observe(this, Observer {
 
@@ -107,12 +109,14 @@ class SearchActivity : AppCompatActivity(), SearchHistoryAdapter.OnItemClickedLi
             override fun onQueryTextChange(newText: String): Boolean {
                 Log.i(TAG, "query text changed is $newText")
                 if (newText.isNotEmpty()) {
+                    activityViewBinding.textViewNewsException.visibility = View.GONE
                     activityViewBinding.recyclerSearchHistory.visibility = View.GONE
                     activityViewBinding.recyclerSearchResults.visibility = View.VISIBLE
                     /** Get the results from the remote for now and showcase it to the user*/
                     //searchViewModel.queryChannel.offer(newText)
                 } else {
                     mVoiceSearchButton.visibility = View.VISIBLE
+                    activityViewBinding.textViewNewsException.visibility = View.GONE
                     activityViewBinding.recyclerSearchHistory.visibility = View.VISIBLE
                     activityViewBinding.recyclerSearchResults.visibility = View.GONE
                 }

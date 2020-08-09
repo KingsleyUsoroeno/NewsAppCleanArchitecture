@@ -4,7 +4,6 @@
 
 
     <data>
-
         <variable
             name="searchActivityViewModel"
             type="com.techkingsley.newsappcleanarchitecture.framework.presentation.search.SearchActivityViewModel" />
@@ -37,6 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:orientation="vertical"
+                    android:visibility="visible"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/search_view"
@@ -47,7 +47,6 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_below="@id/search_view"
-                    android:layout_centerInParent="true"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:visibility="@{searchActivityViewModel.loadingState ? view.VISIBLE : view.GONE}"
@@ -63,7 +62,8 @@
                     android:layout_height="0dp"
                     android:layout_below="@id/search_view"
                     android:orientation="vertical"
-                    android:visibility="@{searchActivityViewModel.loadingState ? view.GONE : view.VISIBLE}"
+                    android:visibility="gone"
+                    tools:visibility="visible"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/search_view"

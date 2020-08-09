@@ -12,7 +12,7 @@ fun goneIfNotNull(view: View, it: Any?) {
     view.visibility = if (it != null) View.GONE else View.VISIBLE
 }
 
-@BindingAdapter("goneIfNotNull")
+@BindingAdapter("showOrDismissProgressbar")
 fun showOrDismissProgressbar(view: View, it: LiveData<Any?>) {
     view.visibility = if (it.value == null) View.VISIBLE else View.GONE
 }
