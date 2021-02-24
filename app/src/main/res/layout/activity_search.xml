@@ -6,28 +6,28 @@
     <data>
         <variable
             name="searchActivityViewModel"
-            type="com.techkingsley.newsappcleanarchitecture.framework.presentation.search.SearchActivityViewModel" />
+            type="com.techkingsley.presentation.search.SearchViewModel" />
 
         <variable
             name="view"
             type="android.view.View" />
     </data>
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context=".framework.ui.search.SearchActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            tools:context=".SearchResultsActivity">
+            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <com.miguelcatalan.materialsearchview.MaterialSearchView
-                    android:id="@+id/search_view"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
+            <com.miguelcatalan.materialsearchview.MaterialSearchView
+                android:id="@+id/search_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,7 +49,6 @@
                     android:layout_below="@id/search_view"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:visibility="@{searchActivityViewModel.loadingState ? view.VISIBLE : view.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

@@ -1,2 +1,7 @@
+include ':presentation'
+include ':domain'
+include ':data'
+include ':remote'
+include ':cache'
 include ':app'
 rootProject.name = "NewsAppCleanArchitecture"

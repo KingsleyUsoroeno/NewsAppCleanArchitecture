@@ -6,13 +6,13 @@
     <data>
         <variable
             name="politicalNewsViewModel"
-            type="com.techkingsley.newsappcleanarchitecture.framework.presentation.politics.PoliticalNewsViewModel" />
+            type="com.techkingsley.presentation.politics.PoliticalNewsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".framework.presentation.politics.PoliticalNewsFragment">
+        tools:context=".framework.ui.politics.PoliticalNewsFragment">
 
         <ProgressBar
             android:id="@+id/loading_spinner"
