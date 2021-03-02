@@ -1,6 +1,7 @@
 package com.techkingsley.newsappcleanarchitecture.framework.ui.politics
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -19,14 +20,13 @@ class PoliticalNewsFragment : Fragment(R.layout.political_news_fragment) {
 
     companion object {
         fun newInstance() = PoliticalNewsFragment()
-        private const val TAG = "PoliticalNewsFragment"
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewBinding = PoliticalNewsFragmentBinding.bind(requireView())
-        //viewBinding.politicalNewsViewModel = viewModel
+        viewBinding.politicalNewsViewModel = viewModel
         viewBinding.lifecycleOwner = this
 
         viewModel.politicalNews.observe(this.viewLifecycleOwner, Observer {

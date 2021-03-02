@@ -1,7 +1,7 @@
 package com.techkingsley.remote.service
 
-import com.techkingsley.remote.model.NewsResponse
-import com.techkingsley.remote.model.SourceNewsResponse
+import com.techkingsley.remote.data.model.NewsResponse
+import com.techkingsley.remote.data.model.SourceNewsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

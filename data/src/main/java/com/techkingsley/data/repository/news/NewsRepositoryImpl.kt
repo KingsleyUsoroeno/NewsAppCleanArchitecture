@@ -9,6 +9,7 @@ import com.techkingsley.domain.entities.SearchHistory
 import com.techkingsley.domain.entities.SourcedNews
 import com.techkingsley.domain.repositories.NewsRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -57,8 +58,8 @@ class NewsRepositoryImpl @Inject constructor(
         this.cacheNewsRepository.deleteSearchHistory(searchHistory = searchHistoryMapper.mapFromDomain(searchHistory))
     }
 
-    override suspend fun fetchTechNews(category: String, from: String, sortBy: String, apiKey: String) {
-        when (val result = this.remoteNewsRepository.fetchTechNews(category, from, sortBy, apiKey)) {
+    override suspend fun fetchTechNews(category: String, from: String) {
+        when (val result = this.remoteNewsRepository.fetchTechNews(category, from)) {
             is Result.Success -> {
                 this.cacheNewsRepository.insertNews(category = category, newsEntity = result.data)
             }
@@ -69,27 +70,28 @@ class NewsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchTrendingNews(category: String, apiKey: String): List<SourcedNews> {
-        return when (val result = remoteNewsRepository.fetchTrendingNews(category, apiKey)) {
+    override suspend fun fetchTrendingNews(): Flow<List<SourcedNews>> {
+        return flow {
+            when (val result = remoteNewsRepository.fetchTrendingNews()) {
+                is Result.Loading -> {
+                    emit(emptyList())
+                }
 
-            is Result.Loading -> {
-                emptyList()
-            }
+                is Result.Success -> {
+                    emit(result.data.map { sourceNewsMapper.mapToDomain(it) })
+                }
 
-            is Result.Success -> {
-                result.data.map { sourceNewsMapper.mapToDomain(it) }
-            }
-
-            is Result.Error -> {
-                throw Exception(result.exception)
+                is Result.Error -> {
+                    throw Exception(result.exception)
+                }
             }
         }
     }
 
-    override suspend fun fetchPoliticalNews(category: String, from: String, sortBy: String, apiKey: String) {
-        when (val result = remoteNewsRepository.fetchPoliticalNews(category, from, sortBy, apiKey)) {
+    override suspend fun fetchPoliticalNews(category: String, from: String) {
+        when (val result = remoteNewsRepository.fetchPoliticalNews(category, from)) {
             is Result.Success -> {
-                cacheNewsRepository.deleteAllNews() // Todo remove this
+                // cacheNewsRepository.deleteAllNews() // Todo remove this
                 cacheNewsRepository.insertNews(category, result.data)
             }
 
@@ -99,8 +101,8 @@ class NewsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchMovieNews(category: String, from: String, sortBy: String, apiKey: String) {
-        when (val result = remoteNewsRepository.fetchMovieNews(category, from, sortBy, apiKey)) {
+    override suspend fun fetchMovieNews(category: String, from: String) {
+        when (val result = remoteNewsRepository.fetchMovieNews(category, from)) {
             is Result.Success -> {
                 cacheNewsRepository.insertNews(category, result.data)
             }
@@ -111,8 +113,8 @@ class NewsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun searchNews(category: String, from: String, sortBy: String, apiKey: String): List<News> {
-        return when (val result = remoteNewsRepository.searchNews(category, from, sortBy, apiKey)) {
+    override suspend fun searchNews(category: String, from: String): List<News> {
+        return when (val result = remoteNewsRepository.searchNews(category, from)) {
 
             is Result.Loading -> emptyList()
 

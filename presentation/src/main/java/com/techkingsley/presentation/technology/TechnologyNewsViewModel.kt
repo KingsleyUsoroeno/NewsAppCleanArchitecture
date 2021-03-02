@@ -1,41 +1,46 @@
 package com.techkingsley.presentation.technology
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.techkingsley.domain.entities.News
 import com.techkingsley.domain.usecases.FetchTechNews
 import com.techkingsley.domain.usecases.GetNewsByCategory
+import com.techkingsley.presentation.utils.NewsConstants
+import com.techkingsley.presentation.utils.from
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
+import java.util.*
+import javax.inject.Inject
 
-class TechnologyNewsViewModel @ViewModelInject constructor(
+@HiltViewModel
+class TechnologyNewsViewModel @Inject constructor(
     private val getNewsByCategory: GetNewsByCategory,
     private val fetchTechNews: FetchTechNews
 ) : ViewModel() {
 
-    companion object {
-        const val NEWS_CATEGORY = "tech"
-    }
+    val cachedTechNews: LiveData<List<News>>
+        get() = getNewsByCategory.invoke(NewsConstants.TECH_NEWS).asLiveData()
 
-    val techNews = getNewsByCategory.invoke(NEWS_CATEGORY).asLiveData()
 
-    private var _eventNetworkError = MutableLiveData<Boolean>()
+    private var _eventNetworkError = MutableLiveData<String>()
 
-    init {
-        refreshDataFromRepository()
-    }
-
-    val isNetworkErrorLiveData: LiveData<Boolean>
+    val networkError: LiveData<String>
         get() = _eventNetworkError
 
-    private fun refreshDataFromRepository() = viewModelScope.launch {
-        try {
-            fetchTechNews.invoke(NEWS_CATEGORY, "", "", "")
-            _eventNetworkError.value = false
-            _eventNetworkError.value = false
+    init {
+        fetchTechNews()
+    }
 
+    private fun fetchTechNews() = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            fetchTechNews.invoke(NewsConstants.TECH_NEWS, Date().from())
         } catch (e: Exception) {
             // Show a Toast error message and hide the progress bar.
-            if (techNews.value.isNullOrEmpty())
-                _eventNetworkError.value = true
+            if (cachedTechNews.value.isNullOrEmpty()) {
+                val message: String = if (e is SocketTimeoutException) "Please check your internet connection and try again" else e.message ?: "something went wrong"
+                _eventNetworkError.postValue(message)
+            }
         }
     }
 }

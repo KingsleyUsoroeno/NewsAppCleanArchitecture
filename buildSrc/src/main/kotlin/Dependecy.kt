@@ -1,6 +1,5 @@
 import Versions.glide
-import Versions.hilt_version
-import Versions.hilt_viewmodels
+import Versions.hilt_view_models
 import Versions.nav_version
 import Versions.work_version
 
@@ -43,7 +42,6 @@ object Versions {
     const val retrofit_version = "2.9.0"
 
     const val timber_version = "4.7.1"
-    const val threetenabp_version = "1.2.4"
     const val viewModelKtx_version = "2.3.0-alpha07"
     const val kotlinVersion = "1.3.72"
     const val fragment_ktx = "1.3.0"
@@ -51,7 +49,8 @@ object Versions {
     const val glide = "4.12.0"
     const val work_version = "2.5.0"
     const val hilt_version = "2.31.2-alpha"
-    const val hilt_viewmodels = "1.0.0-alpha01"
+    const val hilt_android_compiler = "2.31.2-alpha"
+    const val hilt_view_models = "1.0.0-alpha01"
     const val javaxInjectVersion = "1"
 }
 
@@ -84,12 +83,12 @@ object Libraries {
 
     const val lifeCycleExtensions = "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
-    const val hiltAndroid = "com.google.dagger:hilt-android:$hilt_version"
-    const val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:2.31.2-alpha"
+    const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hilt_version}"
+    const val hiltAndroidCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt_android_compiler}"
 
     // DAGGER HILT AND VIEW MODEL
-    const val hiltViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodels"
-    const val hiltViewModelCompiler = "androidx.hilt:hilt-compiler:$hilt_viewmodels"
+    const val hiltViewModel = "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_view_models"
+    const val hiltViewModelCompiler = "androidx.hilt:hilt-compiler:$hilt_view_models"
 
     const val coroutines =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines_version}"

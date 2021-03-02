@@ -1,13 +1,16 @@
 package com.techkingsley.newsappcleanarchitecture.framework.ui.movies
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.techkingsley.domain.entities.News
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.databinding.MovieFragmentBinding
 import com.techkingsley.newsappcleanarchitecture.framework.ui.adapter.NewsAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MovieFragment : Fragment(R.layout.movie_fragment) {
@@ -17,28 +20,37 @@ class MovieFragment : Fragment(R.layout.movie_fragment) {
 
     companion object {
         fun newInstance() = MovieFragment()
-        private const val TAG = "MovieFragment"
     }
 
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewBinding = MovieFragmentBinding.bind(requireView())
-        //viewBinding.movieViewModel = movieViewModel
+        viewBinding.movieViewModel = movieViewModel
         viewBinding.lifecycleOwner = this
 
-//        movieViewModel.movieNews.observe(this.viewLifecycleOwner, Observer {
-//            if (it.isNullOrEmpty().not()) {
-//                buildRecyclerView(it)
-//            } else {
-//                Log.i(TAG, "couldn't fetch news from the server ask the user to try again")
-//            }
-//        })
+        movieViewModel.news.observe(viewLifecycleOwner, Observer { news ->
+            if (news.isNullOrEmpty().not()) {
+                buildRecyclerView(news)
+            }
+        })
+
+        movieViewModel.errorLiveData.observe(viewLifecycleOwner, Observer {
+            Timber.i("error fetching news is $it")
+        })
     }
 
     private fun buildRecyclerView(items: List<News>) {
-        val adapter = NewsAdapter()
-        adapter.submitList(items)
-        viewBinding.movieNewsRecyclerView.adapter = adapter
+        with(viewBinding) {
+            if (items.isEmpty()) {
+                textErrorMessage.visibility = View.VISIBLE
+                movieNewsRecyclerView.visibility = View.GONE
+            } else {
+                textErrorMessage.visibility = View.GONE
+                movieNewsRecyclerView.visibility = View.VISIBLE
+                val adapter = NewsAdapter()
+                adapter.submitList(items)
+                viewBinding.movieNewsRecyclerView.adapter = adapter
+            }
+        }
     }
 }

@@ -35,12 +35,28 @@
             android:layout_height="0dp"
             android:clipToPadding="false"
             android:orientation="vertical"
+            tools:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/layout_news" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tx_error_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:gravity="center"
+            android:text="@{techViewModel.networkError}"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Error Message comes here" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

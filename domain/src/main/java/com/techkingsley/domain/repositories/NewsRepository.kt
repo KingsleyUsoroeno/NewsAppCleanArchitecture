@@ -24,13 +24,13 @@ interface NewsRepository {
 
     suspend fun deleteSearchHistory(searchHistory: SearchHistory)
 
-    suspend fun fetchTechNews(category: String, from: String, sortBy: String, apiKey: String)
+    suspend fun fetchTechNews(category: String, from: String)
 
-    suspend fun fetchTrendingNews(category: String, apiKey: String): List<SourcedNews>
+    suspend fun fetchTrendingNews(): Flow<List<SourcedNews>>
 
-    suspend fun fetchPoliticalNews(category: String, from: String, sortBy: String, apiKey: String)
+    suspend fun fetchPoliticalNews(category: String, from: String)
 
-    suspend fun fetchMovieNews(category: String, from: String, sortBy: String, apiKey: String)
+    suspend fun fetchMovieNews(category: String, from: String)
 
-    suspend fun searchNews(category: String, from: String, sortBy: String, apiKey: String): List<News>
+    suspend fun searchNews(category: String, from: String): List<News>
 }

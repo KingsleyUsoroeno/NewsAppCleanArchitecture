@@ -2,13 +2,12 @@ package com.techkingsley.newsappcleanarchitecture.framework.ui.news
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.databinding.NewsFragmentBinding
@@ -19,26 +18,22 @@ import com.techkingsley.newsappcleanarchitecture.framework.ui.search.SearchActiv
 import com.techkingsley.newsappcleanarchitecture.framework.ui.technology.TechnologyNewsFragment
 import com.techkingsley.newsappcleanarchitecture.framework.ui.trending.TrendingNewsFragment
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 
 @AndroidEntryPoint
 class NewsFragment : Fragment(R.layout.news_fragment), NewsTagRecyclerAdapter.OnItemClickedListener {
 
-    private val viewModel: NewsViewModel by viewModels()
     private lateinit var viewBinding: NewsFragmentBinding
     private lateinit var fragmentContainer: ViewPager2
-
-    companion object {
-        private const val TAG = "NewsFragment"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewBinding = NewsFragmentBinding.bind(requireView())
         (activity as AppCompatActivity?)!!.setSupportActionBar(viewBinding.newsFragmentToolbar)
         (activity as AppCompatActivity?)!!.supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -55,7 +50,7 @@ class NewsFragment : Fragment(R.layout.news_fragment), NewsTagRecyclerAdapter.On
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_search -> this.requireActivity().startActivity(Intent(this.requireContext(), SearchActivity::class.java))
-            R.id.action_notifications -> Log.i(TAG, "Notifications action was clicked")
+            R.id.action_notifications -> Timber.i("Notifications action was clicked")
         }
         return super.onOptionsItemSelected(item)
     }

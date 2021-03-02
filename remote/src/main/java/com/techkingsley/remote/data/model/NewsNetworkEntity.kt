@@ -1,4 +1,4 @@
-package com.techkingsley.remote.model
+package com.techkingsley.remote.data.model
 
 import com.google.gson.annotations.SerializedName
 

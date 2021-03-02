@@ -8,9 +8,9 @@
             name="news"
             type="com.techkingsley.domain.entities.News" />
 
-        <!--        <variable-->
-        <!--            name="resultCallback"-->
-        <!--            type="com.techkingsley.newsappcleanarchitecture.framework.ui.adapter.SearchResultAdapter.OnItemClickedListener" />-->
+        <variable
+            name="resultCallback"
+            type="com.techkingsley.newsappcleanarchitecture.framework.ui.adapter.SearchResultAdapter.OnItemClickedListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -93,6 +93,7 @@
             android:id="@+id/clickableOverlay"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:onClick="@{() -> resultCallback.onSearchResultClicked(news)}"
             android:background="?attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

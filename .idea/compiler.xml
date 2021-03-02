@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.8" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="NewsAppCleanArchitecture.app" target="11" />
+      <module name="NewsAppCleanArchitecture.buildSrc" target="11" />
+      <module name="NewsAppCleanArchitecture.cache" target="11" />
+      <module name="NewsAppCleanArchitecture.presentation" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

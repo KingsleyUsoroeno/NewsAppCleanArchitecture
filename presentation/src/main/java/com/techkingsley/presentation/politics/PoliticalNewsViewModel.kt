@@ -5,18 +5,20 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.techkingsley.domain.usecases.FetchPoliticalNews
 import com.techkingsley.domain.usecases.GetNewsByCategory
+import com.techkingsley.presentation.utils.NewsConstants
+import com.techkingsley.presentation.utils.from
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 class PoliticalNewsViewModel @ViewModelInject constructor(
     private val fetchPoliticalNews: FetchPoliticalNews,
     private val getAllNews: GetNewsByCategory
 ) : ViewModel() {
 
-    companion object {
-        const val NEWS_CATEGORY = "politics"
-    }
-
     private var _eventNetworkError = MutableLiveData<Boolean>()
+
+    private val newsCategory: String = NewsConstants.POLITICAL_NEWS
 
     val isNetworkErrorLiveData: LiveData<Boolean>
         get() = _eventNetworkError
@@ -25,19 +27,17 @@ class PoliticalNewsViewModel @ViewModelInject constructor(
         fetchPoliticalNews()
     }
 
-    val politicalNews = getAllNews.invoke(NEWS_CATEGORY).asLiveData()
+    val politicalNews = getAllNews.invoke(newsCategory).asLiveData()
 
-    private fun fetchPoliticalNews() = viewModelScope.launch {
+    private fun fetchPoliticalNews() = viewModelScope.launch(Dispatchers.IO) {
         try {
-            fetchPoliticalNews.invoke(NEWS_CATEGORY, "2021-01-24", "publishedAt", "ca4ae9f450a44a39bd7b77f9a8745450")
-            _eventNetworkError.value = false
-            _eventNetworkError.value = false
+            fetchPoliticalNews.invoke(newsCategory, Date().from())
 
         } catch (e: Exception) {
             Log.i("PoliticalNewsViewModel", "exception caught is $e")
             // Show a Toast error message and hide the progress bar.
             if (politicalNews.value.isNullOrEmpty())
-                _eventNetworkError.value = true
+                _eventNetworkError.postValue(true)
         }
     }
 }

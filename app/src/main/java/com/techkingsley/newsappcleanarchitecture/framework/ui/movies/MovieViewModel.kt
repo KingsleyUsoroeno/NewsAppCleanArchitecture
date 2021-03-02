@@ -1,39 +1,52 @@
 package com.techkingsley.newsappcleanarchitecture.framework.ui.movies
 
+import androidx.lifecycle.*
+import com.techkingsley.domain.entities.News
+import com.techkingsley.domain.usecases.FetchMovieNews
+import com.techkingsley.domain.usecases.GetNewsByCategory
+import com.techkingsley.presentation.utils.NewsConstants
+import com.techkingsley.presentation.utils.from
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
+import java.util.*
+import javax.inject.Inject
 
-import androidx.lifecycle.ViewModel
 
-//import com.techkingsley.cache.repository.NewsAppRepository
+@HiltViewModel
+class MovieViewModel @Inject constructor(
+    private val fetchMovieNews: FetchMovieNews,
+    private val getNewsByCategory: GetNewsByCategory
+) : ViewModel() {
 
-class MovieViewModel : ViewModel()
+    private var _eventNetworkError = MutableLiveData<String>()
 
-//class MovieViewModel @ViewModelInject constructor(private val newsAppRepository: NewsAppRepository) : ViewModel() {
-//
-//    companion object {
-//        const val NEWS_CATEGORY = "movies"
-//    }
-//
-//    val movieNews = newsAppRepository.observeAllNews(NEWS_CATEGORY).asLiveData()
-//
-//    private var _eventNetworkError = MutableLiveData<Boolean>()
-//
-//    val isNetworkErrorLiveData: LiveData<Boolean>
-//        get() = _eventNetworkError
-//
-//    init {
-//        refreshDataFromRepository()
-//    }
-//
-//    private fun refreshDataFromRepository() = viewModelScope.launch {
-//        try {
-//            newsAppRepository.refreshMovieNews(NEWS_CATEGORY)
-//            _eventNetworkError.value = false
-//            _eventNetworkError.value = false
-//
-//        } catch (networkError: IOException) {
-//            // Show a Toast error message and hide the progress bar.
-//            if (movieNews.value.isNullOrEmpty())
-//                _eventNetworkError.value = true
-//        }
-//    }
-//}
+    private val newsCategory: String = NewsConstants.MOVIE_NEWS
+
+    val errorLiveData: LiveData<String>
+        get() = _eventNetworkError
+
+    val news: LiveData<List<News>>
+        get() = getNewsByCategory.invoke(newsCategory).asLiveData()
+
+    init {
+        fetchNews()
+    }
+
+    private fun fetchNews() = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            fetchMovieNews.invoke(category = newsCategory, from = Date().from())
+
+        } catch (exception: Exception) {
+            if (news.value.isNullOrEmpty()) {
+                if (exception is SocketTimeoutException) {
+                    _eventNetworkError.postValue("Please check your internet connection and try again")
+
+                } else {
+                    _eventNetworkError.postValue(exception.message)
+                }
+            }
+        }
+    }
+}
