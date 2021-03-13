@@ -1,7 +1,7 @@
 package com.techkingsley.data.mapper
 
 import com.techkingsley.data.model.NewsEntity
-import com.techkingsley.domain.entities.News
+import com.techkingsley.domain.entities.news.News
 import javax.inject.Inject
 
 class NewsMapper @Inject constructor() : EntityMapper<News, NewsEntity> {
@@ -26,6 +26,10 @@ class NewsMapper @Inject constructor() : EntityMapper<News, NewsEntity> {
             newsUrl = type.newsUrl,
             urlToImage = type.urlToImage
         )
+    }
+
+    fun mapToDomainList(newsEntity: List<NewsEntity>): List<News> {
+        return newsEntity.map { mapToDomain(it) }
     }
 
 }

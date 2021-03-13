@@ -4,13 +4,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import com.techkingsley.domain.entities.News
+import androidx.lifecycle.lifecycleScope
+import com.techkingsley.domain.entities.news.News
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.databinding.PoliticalNewsFragmentBinding
 import com.techkingsley.newsappcleanarchitecture.framework.ui.adapter.NewsAdapter
+import com.techkingsley.presentation.hide
+import com.techkingsley.presentation.newsstate.NewsUiState
 import com.techkingsley.presentation.politics.PoliticalNewsViewModel
+import com.techkingsley.presentation.show
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 
 @AndroidEntryPoint
 class PoliticalNewsFragment : Fragment(R.layout.political_news_fragment) {
@@ -29,13 +34,31 @@ class PoliticalNewsFragment : Fragment(R.layout.political_news_fragment) {
         viewBinding.politicalNewsViewModel = viewModel
         viewBinding.lifecycleOwner = this
 
-        viewModel.politicalNews.observe(this.viewLifecycleOwner, Observer {
-            buildRecyclerView(it)
-        })
+        with(viewModel) {
+            lifecycleScope.launchWhenStarted {
+                uiState.collect {
+                    when (it) {
+                        is NewsUiState.Idle -> {
+                            Timber.i("Am in an idle state")
+                        }
 
-        viewModel.isNetworkErrorLiveData.observe(this.viewLifecycleOwner, Observer {
+                        is NewsUiState.Loading -> {
+                            viewBinding.loadingSpinner.show()
+                        }
 
-        })
+                        is NewsUiState.Success -> {
+                            viewBinding.loadingSpinner.hide()
+                            buildRecyclerView(it.news)
+                        }
+
+                        is NewsUiState.Error -> {
+                            viewBinding.loadingSpinner.hide()
+                            //viewBinding.txErrorMessage.text = it.exception
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun buildRecyclerView(item: List<News>) {

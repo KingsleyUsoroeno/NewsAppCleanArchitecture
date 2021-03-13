@@ -27,4 +27,8 @@ interface CacheDataSource {
     suspend fun deleteBookMarkedNews(bookMarkNews: CachedBookMarkNews)
 
     fun getBookMarkedNews(): Flow<List<CachedBookMarkNews>>
+
+    suspend fun getAllNewsCount(newsCategory: String): Int?
+
+    suspend fun getNewsByCategory(newsCategory: String): List<CachedNews>
 }

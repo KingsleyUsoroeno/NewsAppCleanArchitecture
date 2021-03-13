@@ -63,4 +63,15 @@ class CacheRepositoryImpl @Inject constructor(
             cachedBookMarkedNews.map { bookMarkNewsMapper.mapFromCached(it) }
         }
     }
+
+    override suspend fun isNewsCached(newsCategory: String): Boolean {
+        val newsCount = cacheDataSource.getAllNewsCount(newsCategory)
+        return !(newsCount == null || newsCount == 0)
+    }
+
+    override suspend fun getNewsByCategory(newsCategory: String): List<NewsEntity> {
+        return this.cacheDataSource.getNewsByCategory(newsCategory).map {
+            newsMapper.mapFromCached(newsCategory, it)
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package com.techkingsley.presentation.newsstate
 
-import com.techkingsley.domain.entities.News
+import com.techkingsley.domain.entities.news.News
 
 sealed class NewsUiState {
     object Idle : NewsUiState()

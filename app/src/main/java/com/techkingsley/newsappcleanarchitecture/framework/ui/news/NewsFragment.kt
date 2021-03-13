@@ -22,7 +22,7 @@ import timber.log.Timber
 
 
 @AndroidEntryPoint
-class NewsFragment : Fragment(R.layout.news_fragment), NewsTagRecyclerAdapter.OnItemClickedListener {
+class NewsFragment : Fragment(R.layout.news_fragment) {
 
     private lateinit var viewBinding: NewsFragmentBinding
     private lateinit var fragmentContainer: ViewPager2
@@ -49,7 +49,8 @@ class NewsFragment : Fragment(R.layout.news_fragment), NewsTagRecyclerAdapter.On
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_search -> this.requireActivity().startActivity(Intent(this.requireContext(), SearchActivity::class.java))
+            R.id.action_search -> this.requireActivity()
+                .startActivity(Intent(this.requireContext(), SearchActivity::class.java))
             R.id.action_notifications -> Timber.i("Notifications action was clicked")
         }
         return super.onOptionsItemSelected(item)
@@ -57,23 +58,26 @@ class NewsFragment : Fragment(R.layout.news_fragment), NewsTagRecyclerAdapter.On
 
     private fun buildTagRecyclerView() {
         val items = arrayListOf("Technology", "Trending", "Politics", "Movies")
-        val tagAdapter = NewsTagRecyclerAdapter(items, this)
+        val tagAdapter = NewsTagRecyclerAdapter(items) { tag ->
+            when (tag) {
+                "Technology" -> fragmentContainer.setCurrentItem(0, true)
+                "Trending" -> fragmentContainer.setCurrentItem(1, true)
+                "Politics" -> fragmentContainer.setCurrentItem(2, true)
+                "Movies" -> fragmentContainer.setCurrentItem(3, true)
+            }
+        }
         viewBinding.newsTagRecyclerView.adapter = tagAdapter
     }
 
     private fun buildFragmentContainer() {
-        val fragments = arrayListOf(TechnologyNewsFragment.newInstance(), TrendingNewsFragment.newInstance(), PoliticalNewsFragment.newInstance(), MovieFragment.newInstance())
+        val fragments = arrayListOf(
+            TechnologyNewsFragment.newInstance(),
+            TrendingNewsFragment.newInstance(),
+            PoliticalNewsFragment.newInstance(),
+            MovieFragment.newInstance()
+        )
         val fragmentAdapter = FragmentViewPagerAdapter(fragments, requireActivity())
         fragmentContainer.isUserInputEnabled = false
         fragmentContainer.adapter = fragmentAdapter
-    }
-
-    override fun onNewsTagClicked(tag: String) {
-        when (tag) {
-            "Technology" -> fragmentContainer.setCurrentItem(0, true)
-            "Trending" -> fragmentContainer.setCurrentItem(1, true)
-            "Politics" -> fragmentContainer.setCurrentItem(2, true)
-            "Movies" -> fragmentContainer.setCurrentItem(3, true)
-        }
     }
 }

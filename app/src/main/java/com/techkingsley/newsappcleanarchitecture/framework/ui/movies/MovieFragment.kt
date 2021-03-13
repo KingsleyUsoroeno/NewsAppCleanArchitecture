@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.techkingsley.domain.entities.News
+import com.techkingsley.domain.entities.news.News
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.databinding.MovieFragmentBinding
 import com.techkingsley.newsappcleanarchitecture.framework.ui.adapter.NewsAdapter

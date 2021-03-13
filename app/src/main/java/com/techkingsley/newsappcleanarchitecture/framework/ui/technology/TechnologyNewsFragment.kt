@@ -5,14 +5,14 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.techkingsley.domain.entities.News
+import com.techkingsley.domain.entities.news.News
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.databinding.TechnologyNewsFragmentBinding
 import com.techkingsley.newsappcleanarchitecture.framework.ui.adapter.NewsAdapter
+import com.techkingsley.presentation.hide
 import com.techkingsley.presentation.newsstate.NewsUiState
+import com.techkingsley.presentation.show
 import com.techkingsley.presentation.technology.TechnologyNewsViewModel
-import com.techkingsley.presentation.utils.hide
-import com.techkingsley.presentation.utils.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber

@@ -3,7 +3,7 @@ package com.techkingsley.newsappcleanarchitecture.framework.ui.trending
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.techkingsley.domain.entities.News
+import com.techkingsley.domain.entities.news.News
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.databinding.TrendingNewsFragmentBinding
 import com.techkingsley.newsappcleanarchitecture.framework.ui.adapter.NewsAdapter

@@ -1,4 +1,4 @@
-package com.techkingsley.domain.entities
+package com.techkingsley.domain.entities.news
 
 data class SourcedNews(
     val id: String,

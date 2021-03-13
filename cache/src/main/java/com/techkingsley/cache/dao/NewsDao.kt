@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.Flow
 interface NewsDao : BaseDao<CachedNews> {
 
     @Query("SELECT * FROM CachedNews")
-    fun observeMovieNews(): Flow<List<CachedNews>>
+    fun observeNews(): Flow<List<CachedNews>>
+
+    @Query("SELECT * FROM CachedNews WHERE newsCategory = :category")
+    suspend fun getNewsByCategory(category: String): List<CachedNews>
 
     @Query("SELECT * FROM CachedNews WHERE newsCategory = :category")
     fun observeNewsByCategory(category: String): Flow<List<CachedNews>>
@@ -23,4 +26,7 @@ interface NewsDao : BaseDao<CachedNews> {
         deleteAllNews()
         insertAll(movies)
     }
+
+    @Query("SELECT COUNT(*) FROM CachedNews WHERE newsCategory =:newsCategory ")
+    suspend fun getCount(newsCategory: String): Int?
 }

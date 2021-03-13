@@ -1,17 +1,14 @@
 package com.techkingsley.newsappcleanarchitecture.framework.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
-import com.techkingsley.domain.entities.News
+import com.techkingsley.domain.entities.news.News
 import com.techkingsley.newsappcleanarchitecture.R
+import com.techkingsley.newsappcleanarchitecture.databinding.LayoutNewsBinding
 
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
@@ -26,29 +23,26 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
         return adapterDataList.size
     }
 
-    inner class NewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val newsTitleTextView = itemView.findViewById<TextView>(R.id.newsTitle)
-        private val newsImage = itemView.findViewById<AppCompatImageView>(R.id.newsImage)
-        private val newsDescriptionTextView = itemView.findViewById<AppCompatTextView>(R.id.newsDescription)
+    inner class NewsViewHolder(private val viewBinding: LayoutNewsBinding) : RecyclerView.ViewHolder(viewBinding.root) {
 
-        fun bind(news: News) {
-            with(news) {
-                newsTitleTextView.text = title
-                newsDescriptionTextView.text = description
+        fun bind(bindingNews: News) {
+            with(viewBinding) {
+                news = bindingNews
                 val requestOptions = RequestOptions().transform(RoundedCorners(50))
                 Glide.with(newsImage.context)
                     .setDefaultRequestOptions(requestOptions)
-                    .load(urlToImage)
+                    .load(news.urlToImage)
                     .placeholder(R.drawable.progress_animation)
                     .error(R.drawable.ic_broken_image)
                     .into(newsImage)
+                executePendingBindings()
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_news, parent, false)
-        return NewsViewHolder(view)
+        val viewBinding = LayoutNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return NewsViewHolder(viewBinding)
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {

@@ -51,4 +51,12 @@ class CacheDataSourceImpl @Inject constructor(
     override fun getBookMarkedNews(): Flow<List<CachedBookMarkNews>> {
         return db.bookMarkedNewsDao().getAllBookMarkedNews()
     }
+
+    override suspend fun getAllNewsCount(newsCategory: String): Int? {
+        return db.newsDao().getCount(newsCategory)
+    }
+
+    override suspend fun getNewsByCategory(newsCategory: String): List<CachedNews> {
+        return db.newsDao().getNewsByCategory(newsCategory)
+    }
 }

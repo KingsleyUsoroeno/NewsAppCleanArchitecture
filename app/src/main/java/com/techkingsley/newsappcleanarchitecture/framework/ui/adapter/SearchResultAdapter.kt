@@ -3,11 +3,11 @@ package com.techkingsley.newsappcleanarchitecture.framework.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.techkingsley.domain.entities.News
-import com.techkingsley.newsappcleanarchitecture.R
+import com.techkingsley.domain.entities.news.News
 import com.techkingsley.newsappcleanarchitecture.databinding.LayoutNewsSearchResultBinding
 
-class SearchResultAdapter(private val onNewsResultClicked: OnItemClickedListener) : RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>() {
+class SearchResultAdapter(private val onNewsResultClicked: OnItemClickedListener) :
+    RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder>() {
 
     private var searchResults = emptyList<News>()
 
@@ -16,8 +16,8 @@ class SearchResultAdapter(private val onNewsResultClicked: OnItemClickedListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.layout_news_search_result, parent, false)
-        val viewBinding = LayoutNewsSearchResultBinding.bind(v)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        val viewBinding = LayoutNewsSearchResultBinding.inflate(layoutInflater, parent, false)
         return SearchResultViewHolder(viewBinding)
     }
 
@@ -34,12 +34,15 @@ class SearchResultAdapter(private val onNewsResultClicked: OnItemClickedListener
         holder.updateSearchResult(searchResults[position])
     }
 
-    inner class SearchResultViewHolder(view: LayoutNewsSearchResultBinding) : RecyclerView.ViewHolder(view.root) {
-        private val viewBinding = view
-        fun updateSearchResult(news: News) {
-            viewBinding.news = news
-            viewBinding.resultCallback = onNewsResultClicked
-            viewBinding.executePendingBindings()
+    inner class SearchResultViewHolder(private val viewBinding: LayoutNewsSearchResultBinding) :
+        RecyclerView.ViewHolder(viewBinding.root) {
+
+        fun updateSearchResult(bindingNews: News) {
+            with(viewBinding) {
+                news = bindingNews
+                resultCallback = onNewsResultClicked
+                executePendingBindings()
+            }
         }
     }
 }

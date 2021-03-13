@@ -52,6 +52,8 @@ object Versions {
     const val hilt_android_compiler = "2.31.2-alpha"
     const val hilt_view_models = "1.0.0-alpha01"
     const val javaxInjectVersion = "1"
+    const val hiltWorkerVersion = "1.0.0-beta01"
+    const val hiltWorkerCompiler = "1.0.0-beta01"
 }
 
 object Libraries {
@@ -99,6 +101,10 @@ object Libraries {
     const val timberVersion = "com.jakewharton.timber:timber:${Versions.timber_version}"
 
     const val javaxInject = "javax.inject:javax.inject:${Versions.javaxInjectVersion}"
+
+    const val workManger = "androidx.hilt:hilt-work:${Versions.hiltWorkerVersion}"
+
+    const val workManagerCompiler = "androidx.hilt:hilt-compiler:${Versions.hiltWorkerCompiler}"
 }
 
 object Network {

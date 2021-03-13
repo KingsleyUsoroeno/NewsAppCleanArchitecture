@@ -1,4 +1,4 @@
-package com.techkingsley.presentation.utils
+package com.techkingsley.presentation
 
 import android.view.View
 import java.text.SimpleDateFormat

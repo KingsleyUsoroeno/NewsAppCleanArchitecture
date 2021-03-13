@@ -3,12 +3,13 @@ package com.techkingsley.newsappcleanarchitecture.framework.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.techkingsley.domain.entities.SearchHistory
+import com.techkingsley.domain.entities.searchhistory.SearchHistory
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.databinding.LayoutSearchHistoryBinding
 
 
-class SearchHistoryAdapter(private val onItemClickedListener: OnItemClickedListener) : RecyclerView.Adapter<SearchHistoryAdapter.SearchHistoryViewHolder>() {
+class SearchHistoryAdapter(private val onItemClickedListener: OnItemClickedListener) :
+    RecyclerView.Adapter<SearchHistoryAdapter.SearchHistoryViewHolder>() {
 
     var searchHistoryList = emptyList<SearchHistory>()
 
@@ -36,13 +37,16 @@ class SearchHistoryAdapter(private val onItemClickedListener: OnItemClickedListe
         holder.updateSearchHistory(searchHistoryList[position])
     }
 
-    inner class SearchHistoryViewHolder(private val viewBinding: LayoutSearchHistoryBinding) : RecyclerView.ViewHolder(viewBinding.root) {
+    inner class SearchHistoryViewHolder(private val viewBinding: LayoutSearchHistoryBinding) :
+        RecyclerView.ViewHolder(viewBinding.root) {
 
-        fun updateSearchHistory(searchHistory: SearchHistory) {
-            viewBinding.searchHistory = searchHistory
-            viewBinding.onItemClickListener = onItemClickedListener
-            viewBinding.root.setOnClickListener { onItemClickedListener.onSearchHistoryClicked(searchHistory) }
-            viewBinding.executePendingBindings()
+        fun updateSearchHistory(history: SearchHistory) {
+            with(viewBinding) {
+                this.searchHistory = history
+                this.onItemClickListener = onItemClickedListener
+                root.setOnClickListener { onItemClickedListener.onSearchHistoryClicked(searchHistory) }
+                executePendingBindings()
+            }
         }
     }
 }

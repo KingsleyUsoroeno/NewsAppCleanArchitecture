@@ -27,4 +27,8 @@ interface CacheNewsRepository {
     suspend fun deleteBookMarkedNews(bookMarkNewsEntity: BookMarkNewsEntity)
 
     fun getAllBookMarkedNews(): Flow<List<BookMarkNewsEntity>>
+
+    suspend fun isNewsCached(newsCategory: String): Boolean
+
+    suspend fun getNewsByCategory(newsCategory: String): List<NewsEntity>
 }

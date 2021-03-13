@@ -82,9 +82,6 @@ dependencies {
     // VIEW PAGER 2
     implementation(Libraries.viewPager2)
 
-    // CHROME EXTENSION FOR VIEWING DATABASE
-    implementation('com.facebook.stetho:stetho:1.5.1')
-
     // IMAGE LOADING
     implementation(Libraries.glideVersion)
     kapt(Libraries.glideCompiler)
@@ -105,5 +102,6 @@ dependencies {
     implementation(Libraries.hiltViewModel)
     kapt(Libraries.hiltViewModelCompiler)
 
-
+    implementation(Libraries.workManager)
+    kapt(Libraries.workManagerCompiler)
 }

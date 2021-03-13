@@ -6,7 +6,7 @@
 
         <variable
             name="news"
-            type="com.techkingsley.domain.entities.News" />
+            type="com.techkingsley.domain.entities.news.News" />
 
         <variable
             name="resultCallback"

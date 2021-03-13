@@ -5,10 +5,11 @@ import com.techkingsley.data.contract.remote.NewsRemoteRepository
 import com.techkingsley.data.mapper.NewsMapper
 import com.techkingsley.data.mapper.SearchedNewsMapper
 import com.techkingsley.data.mapper.SourceNewsMapper
-import com.techkingsley.data.state.Result
-import com.techkingsley.domain.entities.News
-import com.techkingsley.domain.entities.SearchHistory
-import com.techkingsley.domain.entities.SourcedNews
+import com.techkingsley.data.model.NewsEntity
+import com.techkingsley.data.model.SourceNewsEntity
+import com.techkingsley.domain.entities.news.News
+import com.techkingsley.domain.entities.news.SourcedNews
+import com.techkingsley.domain.entities.searchhistory.SearchHistory
 import com.techkingsley.domain.repositories.NewsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -65,74 +66,30 @@ class NewsRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun fetchTechNews(category: String, from: String) {
-        when (val result = newsRemoteRepository.fetchTechNews(category, from)) {
-            is Result.Success -> {
-                val news = result.data.map { newsMapper.mapToDomain(it) }
-                insertAllNews(category, news)
-            }
-
-            is Result.Error -> {
-                throw Exception(result.exception)
+    override fun fetchNewsByCategory(category: String, from: String): Flow<List<News>> {
+        return flow {
+            val cachedNews: List<NewsEntity> = cacheNewsRepository.getNewsByCategory(category)
+            if (cacheNewsRepository.isNewsCached(category)) {
+                emit(newsMapper.mapToDomainList(cachedNews))
+            } else {
+                val news: List<NewsEntity> = newsRemoteRepository.fetchNewsByCategory(category, from)
+                cacheNewsRepository.insertNews(category, news)
+                emit(newsMapper.mapToDomainList(cacheNewsRepository.getNewsByCategory(category)))
             }
         }
     }
 
     override fun fetchTrendingNews(): Flow<List<SourcedNews>> {
         return flow {
-            when (val result = newsRemoteRepository.fetchTrendingNews()) {
-                is Result.Loading -> {
-                    emit(emptyList())
-                }
-
-                is Result.Success -> {
-                    emit(result.data.map { sourceNewsMapper.mapToDomain(it) })
-                }
-
-                is Result.Error -> {
-                    throw Exception(result.exception)
-                }
-            }
+            val sourcedNews: List<SourceNewsEntity> = newsRemoteRepository.fetchTrendingNews()
+            emit(sourcedNews.map { sourceNewsMapper.mapToDomain(it) })
         }
     }
 
-    override suspend fun fetchPoliticalNews(category: String, from: String) {
-        when (val result = newsRemoteRepository.fetchPoliticalNews(category, from)) {
-            is Result.Success -> {
-                cacheNewsRepository.insertNews(category, result.data)
-            }
-
-            is Result.Error -> {
-                throw Exception(result.exception)
-            }
-        }
-    }
-
-    override suspend fun fetchMovieNews(category: String, from: String) {
-        when (val result = newsRemoteRepository.fetchMovieNews(category, from)) {
-            is Result.Success -> {
-                cacheNewsRepository.insertNews(category, result.data)
-            }
-
-            is Result.Error -> {
-                throw Exception(result.exception)
-            }
-        }
-    }
-
-    override suspend fun searchNews(category: String, from: String): List<News> {
-        return when (val result = newsRemoteRepository.searchNews(category, from)) {
-            is Result.Loading -> {
-                emptyList()
-            }
-
-            is Result.Success -> {
-                result.data.map { newsMapper.mapToDomain(it) }
-            }
-
-            is Result.Error -> {
-                throw Exception(result.exception)
-            }
+    override suspend fun searchNews(category: String, from: String): Flow<List<News>> {
+        return flow {
+            val news: List<NewsEntity> = newsRemoteRepository.fetchNewsByCategory(category, from)
+            emit(newsMapper.mapToDomainList(news))
         }
     }
 }
