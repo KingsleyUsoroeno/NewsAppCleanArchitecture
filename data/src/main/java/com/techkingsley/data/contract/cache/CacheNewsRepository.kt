@@ -1,4 +1,4 @@
-package com.techkingsley.data.repository.news
+package com.techkingsley.data.contract.cache
 
 
 import com.techkingsley.data.model.BookMarkNewsEntity

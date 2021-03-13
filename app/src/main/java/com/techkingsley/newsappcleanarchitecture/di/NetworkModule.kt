@@ -3,12 +3,10 @@ package com.techkingsley.newsappcleanarchitecture.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.techkingsley.data.repository.news.NewsRemote
+import com.techkingsley.data.contract.remote.NewsRemoteRepository
 import com.techkingsley.newsappcleanarchitecture.BuildConfig
-import com.techkingsley.remote.data.repository.NewsRemoteImpl
+import com.techkingsley.remote.data.repository.NewsRemoteRepositoryImpl
 import com.techkingsley.remote.service.NewsApiService
-import com.techkingsley.remote.source.news.NewsDataSource
-import com.techkingsley.remote.source.news.NewsDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -25,11 +23,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 interface NetworkModule {
 
-    @Binds
-    fun bindNewsAppRepository(newsRemoteImpl: NewsRemoteImpl): NewsRemote
-
-    @Binds
-    fun bindRemoteNewsDataSource(newsDataSourceImpl: NewsDataSourceImpl): NewsDataSource
+    @get:[Binds Singleton]
+    val NewsRemoteRepositoryImpl.newsRepository: NewsRemoteRepository
 
     companion object {
         @[Provides Singleton]

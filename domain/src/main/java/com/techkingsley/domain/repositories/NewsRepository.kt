@@ -26,7 +26,7 @@ interface NewsRepository {
 
     suspend fun fetchTechNews(category: String, from: String)
 
-    suspend fun fetchTrendingNews(): Flow<List<SourcedNews>>
+    fun fetchTrendingNews(): Flow<List<SourcedNews>>
 
     suspend fun fetchPoliticalNews(category: String, from: String)
 

@@ -1,10 +1,10 @@
-package com.techkingsley.data.repository.news
+package com.techkingsley.data.contract.remote
 
 import com.techkingsley.data.model.NewsEntity
 import com.techkingsley.data.model.SourceNewsEntity
 import com.techkingsley.data.state.Result
 
-interface NewsRemote {
+interface NewsRemoteRepository {
 
     suspend fun fetchTechNews(category: String, from: String): Result<List<NewsEntity>>
 

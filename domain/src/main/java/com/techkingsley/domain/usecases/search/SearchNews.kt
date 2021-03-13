@@ -1,4 +1,4 @@
-package com.techkingsley.domain.usecases
+package com.techkingsley.domain.usecases.search
 
 import com.techkingsley.domain.repositories.NewsRepository
 import javax.inject.Inject

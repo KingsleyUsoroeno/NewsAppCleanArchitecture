@@ -6,7 +6,11 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.techkingsley.domain.entities.News
 import com.techkingsley.domain.entities.SearchHistory
-import com.techkingsley.domain.usecases.*
+import com.techkingsley.domain.usecases.news.GetNewsByCategory
+import com.techkingsley.domain.usecases.search.SearchNews
+import com.techkingsley.domain.usecases.searchhistory.AddSearchHistory
+import com.techkingsley.domain.usecases.searchhistory.DeleteSearchHistory
+import com.techkingsley.domain.usecases.searchhistory.GetAllSearchHistory
 import com.techkingsley.presentation.utils.from
 import kotlinx.coroutines.launch
 import java.util.*

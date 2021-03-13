@@ -11,11 +11,6 @@ interface NewsApiService {
     @GET("v2/sources")
     suspend fun getTrendingNews(@Query("apiKey") apiKey: String): Response<SourceNewsResponse>
 
-    @GET("v2/top-headlines")
-    suspend fun getTrendingNewsDetail(
-        @Query("country") country: String
-    ): Response<NewsResponse>
-
     @GET("v2/everything")
     suspend fun getNewsByCategory(
         @Query("q") category: String,

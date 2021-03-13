@@ -3,8 +3,8 @@ package com.techkingsley.presentation.politics
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.techkingsley.domain.usecases.FetchPoliticalNews
-import com.techkingsley.domain.usecases.GetNewsByCategory
+import com.techkingsley.domain.usecases.news.FetchPoliticalNews
+import com.techkingsley.domain.usecases.news.GetNewsByCategory
 import com.techkingsley.presentation.utils.NewsConstants
 import com.techkingsley.presentation.utils.from
 import kotlinx.coroutines.Dispatchers

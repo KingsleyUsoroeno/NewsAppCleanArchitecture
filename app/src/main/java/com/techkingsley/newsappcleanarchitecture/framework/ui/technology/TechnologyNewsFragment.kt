@@ -4,13 +4,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.techkingsley.domain.entities.News
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.databinding.TechnologyNewsFragmentBinding
 import com.techkingsley.newsappcleanarchitecture.framework.ui.adapter.NewsAdapter
+import com.techkingsley.presentation.newsstate.NewsUiState
 import com.techkingsley.presentation.technology.TechnologyNewsViewModel
+import com.techkingsley.presentation.utils.hide
+import com.techkingsley.presentation.utils.show
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 
 @AndroidEntryPoint
 class TechnologyNewsFragment : Fragment(R.layout.technology_news_fragment) {
@@ -28,24 +33,36 @@ class TechnologyNewsFragment : Fragment(R.layout.technology_news_fragment) {
         viewBinding.techViewModel = techNewsViewModel
         viewBinding.lifecycleOwner = this
 
-        techNewsViewModel.cachedTechNews.observe(this.viewLifecycleOwner, Observer { techNews ->
-            buildRecyclerView(techNews)
-        })
+        lifecycleScope.launchWhenStarted {
+            // Triggers the flow and starts listening for values
+            techNewsViewModel.uiState.collect {
+                when (it) {
+                    is NewsUiState.Idle -> {
+                        Timber.i("Am in an idle state")
+                    }
+
+                    is NewsUiState.Loading -> {
+                        viewBinding.loadingSpinner.show()
+                    }
+
+                    is NewsUiState.Success -> {
+                        viewBinding.loadingSpinner.hide()
+                        buildRecyclerView(it.news)
+                    }
+
+                    is NewsUiState.Error -> {
+                        viewBinding.loadingSpinner.hide()
+                        viewBinding.txErrorMessage.text = it.exception
+                    }
+                }
+            }
+        }
     }
 
     private fun buildRecyclerView(news: List<News>) {
         with(viewBinding) {
-            if (news.isNullOrEmpty().not()) {
-                val adapter = NewsAdapter().apply { submitList(news) }
-                technologyNewsRecyclerView.adapter = adapter
-                technologyNewsRecyclerView.visibility = View.VISIBLE
-                txErrorMessage.visibility = View.GONE
-                loadingSpinner.visibility = View.GONE
-            } else {
-                technologyNewsRecyclerView.visibility = View.GONE
-                txErrorMessage.visibility = View.VISIBLE
-                loadingSpinner.visibility = View.GONE
-            }
+            val adapter = NewsAdapter().apply { submitList(news) }
+            technologyNewsRecyclerView.adapter = adapter
         }
     }
 }

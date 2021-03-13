@@ -4,10 +4,10 @@ import com.techkingsley.cache.mappers.bookmark.BookMarkNewsMapper
 import com.techkingsley.cache.mappers.news.NewsMapper
 import com.techkingsley.cache.mappers.search.SearchResultMapper
 import com.techkingsley.cache.source.news.CacheDataSource
+import com.techkingsley.data.contract.cache.CacheNewsRepository
 import com.techkingsley.data.model.BookMarkNewsEntity
 import com.techkingsley.data.model.NewsEntity
 import com.techkingsley.data.model.SearchHistoryEntity
-import com.techkingsley.data.repository.news.CacheNewsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

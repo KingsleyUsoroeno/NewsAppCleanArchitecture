@@ -1,17 +1,17 @@
 package com.techkingsley.newsappcleanarchitecture.di
 
-import com.techkingsley.data.repository.news.NewsRepositoryImpl
-import com.techkingsley.domain.repositories.NewsRepository
+import com.ezike.tobenna.starwarssearch.domain.executor.PostExecutionThread
+import com.techkingsley.newsappcleanarchitecture.executor.PostExecutionThreadImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Module
 @InstallIn(SingletonComponent::class)
-interface DomainModule {
+@Module
+interface ExecutorModule {
 
     @get:[Binds Singleton]
-    val NewsRepositoryImpl.newsRepository: NewsRepository
+    val PostExecutionThreadImpl.postExecutionThread: PostExecutionThread
 }

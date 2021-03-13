@@ -8,7 +8,7 @@ import com.techkingsley.cache.db.NewsDatabase
 import com.techkingsley.cache.repository.news.CacheRepositoryImpl
 import com.techkingsley.cache.source.news.CacheDataSource
 import com.techkingsley.cache.source.news.CacheDataSourceImpl
-import com.techkingsley.data.repository.news.CacheNewsRepository
+import com.techkingsley.data.contract.cache.CacheNewsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

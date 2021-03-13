@@ -1,5 +1,7 @@
 package com.techkingsley.data.repository.news
 
+import com.techkingsley.data.contract.cache.CacheNewsRepository
+import com.techkingsley.data.contract.remote.NewsRemoteRepository
 import com.techkingsley.data.mapper.NewsMapper
 import com.techkingsley.data.mapper.SearchedNewsMapper
 import com.techkingsley.data.mapper.SourceNewsMapper
@@ -15,7 +17,7 @@ import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(
     private val cacheNewsRepository: CacheNewsRepository,
-    private val remoteNewsRepository: NewsRemote,
+    private val newsRemoteRepository: NewsRemoteRepository,
     private val newsMapper: NewsMapper = NewsMapper(),
     private val searchHistoryMapper: SearchedNewsMapper = SearchedNewsMapper(),
     private val sourceNewsMapper: SourceNewsMapper = SourceNewsMapper()
@@ -28,7 +30,9 @@ class NewsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertSearchHistory(searchHistory: SearchHistory) {
-        this.cacheNewsRepository.addSearchHistory(searchHistory = searchHistoryMapper.mapFromDomain(searchHistory))
+        this.cacheNewsRepository.addSearchHistory(
+            searchHistory = searchHistoryMapper.mapFromDomain(searchHistory)
+        )
     }
 
     override suspend fun insertNews(news: News) {
@@ -55,13 +59,17 @@ class NewsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteSearchHistory(searchHistory: SearchHistory) {
-        this.cacheNewsRepository.deleteSearchHistory(searchHistory = searchHistoryMapper.mapFromDomain(searchHistory))
+        this.cacheNewsRepository.deleteSearchHistory(
+            searchHistory =
+            searchHistoryMapper.mapFromDomain(searchHistory)
+        )
     }
 
     override suspend fun fetchTechNews(category: String, from: String) {
-        when (val result = this.remoteNewsRepository.fetchTechNews(category, from)) {
+        when (val result = newsRemoteRepository.fetchTechNews(category, from)) {
             is Result.Success -> {
-                this.cacheNewsRepository.insertNews(category = category, newsEntity = result.data)
+                val news = result.data.map { newsMapper.mapToDomain(it) }
+                insertAllNews(category, news)
             }
 
             is Result.Error -> {
@@ -70,9 +78,9 @@ class NewsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchTrendingNews(): Flow<List<SourcedNews>> {
+    override fun fetchTrendingNews(): Flow<List<SourcedNews>> {
         return flow {
-            when (val result = remoteNewsRepository.fetchTrendingNews()) {
+            when (val result = newsRemoteRepository.fetchTrendingNews()) {
                 is Result.Loading -> {
                     emit(emptyList())
                 }
@@ -89,9 +97,8 @@ class NewsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchPoliticalNews(category: String, from: String) {
-        when (val result = remoteNewsRepository.fetchPoliticalNews(category, from)) {
+        when (val result = newsRemoteRepository.fetchPoliticalNews(category, from)) {
             is Result.Success -> {
-                // cacheNewsRepository.deleteAllNews() // Todo remove this
                 cacheNewsRepository.insertNews(category, result.data)
             }
 
@@ -102,7 +109,7 @@ class NewsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchMovieNews(category: String, from: String) {
-        when (val result = remoteNewsRepository.fetchMovieNews(category, from)) {
+        when (val result = newsRemoteRepository.fetchMovieNews(category, from)) {
             is Result.Success -> {
                 cacheNewsRepository.insertNews(category, result.data)
             }
@@ -114,9 +121,10 @@ class NewsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun searchNews(category: String, from: String): List<News> {
-        return when (val result = remoteNewsRepository.searchNews(category, from)) {
-
-            is Result.Loading -> emptyList()
+        return when (val result = newsRemoteRepository.searchNews(category, from)) {
+            is Result.Loading -> {
+                emptyList()
+            }
 
             is Result.Success -> {
                 result.data.map { newsMapper.mapToDomain(it) }

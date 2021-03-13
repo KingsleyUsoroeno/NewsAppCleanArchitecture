@@ -2,8 +2,8 @@ package com.techkingsley.newsappcleanarchitecture.framework.ui.movies
 
 import androidx.lifecycle.*
 import com.techkingsley.domain.entities.News
-import com.techkingsley.domain.usecases.FetchMovieNews
-import com.techkingsley.domain.usecases.GetNewsByCategory
+import com.techkingsley.domain.usecases.news.FetchMovieNews
+import com.techkingsley.domain.usecases.news.GetNewsByCategory
 import com.techkingsley.presentation.utils.NewsConstants
 import com.techkingsley.presentation.utils.from
 import dagger.hilt.android.lifecycle.HiltViewModel
