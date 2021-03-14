@@ -3,14 +3,14 @@ package com.techkingsley.cache.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
-import com.techkingsley.cache.model.CachedNews
+import com.techkingsley.cache.models.CachedNews
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NewsDao : BaseDao<CachedNews> {
 
-    @Query("SELECT * FROM CachedNews")
-    fun observeNews(): Flow<List<CachedNews>>
+    @get:Query("SELECT * FROM CachedNews")
+    val observeNews: Flow<List<CachedNews>>
 
     @Query("SELECT * FROM CachedNews WHERE newsCategory = :category")
     suspend fun getNewsByCategory(category: String): List<CachedNews>

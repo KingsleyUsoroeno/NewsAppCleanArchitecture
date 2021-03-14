@@ -7,16 +7,18 @@ import javax.inject.Inject
 class TrendingNewsMapper @Inject constructor() : TrendingEntityMapper<SourceNewsResponse, List<SourceNewsEntity>> {
 
     override fun mapFromRemote(type: SourceNewsResponse): List<SourceNewsEntity> {
-        return type.articles.map {
-            SourceNewsEntity(
-                id = it.id,
-                name = it.name,
-                description = it.description,
-                url = it.url,
-                category = it.category,
-                language = it.language,
-                country = it.country
-            )
+        return with(type) {
+            articles.map {
+                SourceNewsEntity(
+                    id = it.id,
+                    name = it.name,
+                    description = it.description,
+                    url = it.url,
+                    category = it.category,
+                    language = it.language,
+                    country = it.country
+                )
+            }
         }
     }
 }

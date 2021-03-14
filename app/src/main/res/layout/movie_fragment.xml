@@ -7,20 +7,19 @@
 
         <variable
             name="movieViewModel"
-            type="com.techkingsley.newsappcleanarchitecture.framework.ui.movies.MovieViewModel" />
+            type="com.techkingsley.presentation.movies.MovieViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".framework.ui.movies.MovieFragment">
+        tools:context=".framework.ui.news.movies.MovieNewsFragment">
 
         <ProgressBar
             android:id="@+id/loading_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:goneIfNotNull="@{movieViewModel.news}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,9 +45,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed-medium"
             android:gravity="center"
-            android:text="@{movieViewModel.errorLiveData}"
             android:textSize="20sp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

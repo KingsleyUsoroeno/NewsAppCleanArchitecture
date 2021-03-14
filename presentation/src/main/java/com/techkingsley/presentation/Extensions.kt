@@ -4,28 +4,32 @@ import android.view.View
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun Date.from(): String {
-    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    return simpleDateFormat.format(this)
-}
+val Date.from: String
+    get() {
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return simpleDateFormat.format(this)
+    }
 
 /**
  * Remove the view (visibility = View.GONE)
  */
-fun View.hide(): View {
-    if (visibility != View.GONE) {
-        visibility = View.GONE
+
+val View.hide: View
+    get() {
+        if (visibility != View.GONE) {
+            visibility = View.GONE
+        }
+        return this
     }
-    return this
-}
 
 /**
  * Show the view  (visibility = View.VISIBLE)
  */
-fun View.show(): View {
-    if (visibility != View.VISIBLE) {
-        visibility = View.VISIBLE
+val View.show: View
+    get() {
+        if (visibility != View.VISIBLE) {
+            visibility = View.VISIBLE
+        }
+        return this
     }
-    return this
-}
 

@@ -9,12 +9,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.miguelcatalan.materialsearchview.MaterialSearchView
-import com.techkingsley.domain.entities.news.News
-import com.techkingsley.domain.entities.searchhistory.SearchHistory
+import com.techkingsley.domain.models.news.News
+import com.techkingsley.domain.models.searchhistory.SearchHistory
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.databinding.ActivitySearchBinding
-import com.techkingsley.newsappcleanarchitecture.framework.ui.adapter.SearchHistoryAdapter
-import com.techkingsley.newsappcleanarchitecture.framework.ui.adapter.SearchResultAdapter
+import com.techkingsley.newsappcleanarchitecture.framework.adapter.SearchHistoryAdapter
+import com.techkingsley.newsappcleanarchitecture.framework.adapter.SearchResultAdapter
 import com.techkingsley.presentation.hide
 import com.techkingsley.presentation.newsstate.NewsUiState
 import com.techkingsley.presentation.search.SearchViewModel
@@ -43,17 +43,17 @@ class SearchActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickedLis
 
 
         lifecycleScope.launchWhenStarted {
-            searchViewModel.uiState.collect {
+            searchViewModel.viewState.collect {
                 when (it) {
                     is NewsUiState.Idle -> {
                     }
                     is NewsUiState.Loading -> {
-                        viewBinding.loadingSpinner.show()
+                        viewBinding.loadingSpinner.show
                     }
                     is NewsUiState.Success -> {
-                        viewBinding.loadingSpinner.hide()
-                        viewBinding.recyclerSearchResults.show()
-                        viewBinding.recyclerSearchHistory.hide()
+                        viewBinding.loadingSpinner.hide
+                        viewBinding.recyclerSearchResults.show
+                        viewBinding.recyclerSearchHistory.hide
                         searchResultAdapter = SearchResultAdapter(this@SearchActivity)
                         searchResultAdapter.setSearchResults(it.news)
                         viewBinding.recyclerSearchResults.adapter = searchHistoryAdapter
@@ -61,9 +61,13 @@ class SearchActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickedLis
                     }
 
                     is NewsUiState.Error -> {
-                        viewBinding.textNewsException.show()
-                        viewBinding.loadingSpinner.show()
+                        viewBinding.textNewsException.show
+                        viewBinding.loadingSpinner.show
                         viewBinding.textNewsException.text = it.exception
+                    }
+
+                    is NewsUiState.Empty -> {
+
                     }
                 }
             }
@@ -78,11 +82,11 @@ class SearchActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickedLis
             val mVoiceSearchButton = searchView.findViewById<ImageView>(R.id.action_voice_btn)
             val mEmptyButton = searchView.findViewById<ImageView>(R.id.action_empty_btn)
             mSearchViewEdt = searchView.findViewById(R.id.searchTextView)
-            mVoiceSearchButton.hide()
+            mVoiceSearchButton.hide
 
             mEmptyButton.setOnClickListener { view ->
-                mVoiceSearchButton.show()
-                view.hide()
+                mVoiceSearchButton.show
+                view.hide
                 mSearchViewEdt.setText("")
             }
 
@@ -90,7 +94,7 @@ class SearchActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickedLis
 
             searchViewModel.allSearchHistory.observe(this@SearchActivity, Observer {
                 it?.let {
-                    textNewsException.hide()
+                    textNewsException.hide
                     searchHistoryAdapter = SearchHistoryAdapter(this@SearchActivity)
                     recyclerSearchHistory.adapter = searchHistoryAdapter
                     searchHistoryAdapter.setSearchResults(it)
@@ -109,16 +113,16 @@ class SearchActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickedLis
                 override fun onQueryTextChange(newText: String): Boolean {
                     Timber.i("query text submitted is $newText")
                     if (newText.isNotEmpty()) {
-                        viewBinding.textNewsException.hide()
-                        viewBinding.recyclerSearchHistory.hide()
-                        viewBinding.recyclerSearchResults.hide()
+                        viewBinding.textNewsException.hide
+                        viewBinding.recyclerSearchHistory.hide
+                        viewBinding.recyclerSearchResults.hide
                         /** Get the results from the remote for now and showcase it to the user*/
                         //searchViewModel.queryChannel.offer(newText)
                     } else {
                         //mVoiceSearchButton.visibility = View.VISIBLE
-                        viewBinding.textNewsException.hide()
-                        viewBinding.recyclerSearchHistory.show()
-                        viewBinding.recyclerSearchResults.hide()
+                        viewBinding.textNewsException.hide
+                        viewBinding.recyclerSearchHistory.show
+                        viewBinding.recyclerSearchResults.hide
                     }
                     return true
                 }

@@ -11,11 +11,11 @@ import javax.inject.Inject
 
 class NewsRemoteRepositoryImpl @Inject constructor(
     private val newsApiService: NewsApiService,
-    private val newsEntityMapper: NewsEntityMapper = NewsEntityMapper(),
-    private val trendingNewsMapper: TrendingNewsMapper = TrendingNewsMapper()
+    private val newsEntityMapper: NewsEntityMapper,
+    private val trendingNewsMapper: TrendingNewsMapper
 ) : NewsRemoteRepository {
 
-    private val apiKey: String = "RemoteConstants.API_KEY"
+    private val apiKey: String = RemoteConstants.API_KEY
 
     private val publishedAt: String = RemoteConstants.PUBLISHED_AT
 

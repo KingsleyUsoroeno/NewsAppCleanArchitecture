@@ -1,55 +1,51 @@
 package com.techkingsley.presentation.technology
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.techkingsley.domain.entities.params.GetNewsParams
-import com.techkingsley.domain.usecases.news.FetchTechNews
-import com.techkingsley.domain.usecases.news.ObserveNewsByCategory
+import com.techkingsley.domain.models.params.GetNewsParams
+import com.techkingsley.domain.usecases.news.GetNewsByCategory
+import com.techkingsley.presentation.BaseViewModel
 import com.techkingsley.presentation.from
 import com.techkingsley.presentation.newsstate.NewsUiState
 import com.techkingsley.presentation.utils.NewsConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import java.net.SocketTimeoutException
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class TechnologyNewsViewModel @Inject constructor(
-    private val observeNews: ObserveNewsByCategory,
-    private val fetchTechNews: FetchTechNews
-) : ViewModel() {
+    private val getNews: GetNewsByCategory
+) : BaseViewModel<NewsUiState>(initialState = NewsUiState.Idle) {
 
-    // Backing property to avoid state updates from other classes
-    private val _uiState = MutableStateFlow<NewsUiState>(NewsUiState.Idle)
-
-    // The UI collects from this StateFlow to get its state updates
-    val uiState: StateFlow<NewsUiState> = _uiState
+    private val newsCategory: String = NewsConstants.TECH_NEWS
 
     init {
-        fetchTechNews()
-    }
-
-    private fun fetchTechNews() {
-        viewModelScope.launch {
-            fetchTechNews.execute(GetNewsParams(NewsConstants.TECH_NEWS, Date().from()))
-                .map {
-                    if (it.isNullOrEmpty().not()) {
-                        _uiState.value = NewsUiState.Success(it)
+        launchOnUI {
+            getNews.execute(GetNewsParams(newsCategory, Date().from))
+                .map { result ->
+                    val error: Throwable? = result.error
+                    if (error == null) {
+                        val news = result.news
+                        if (news.isNullOrEmpty().not()) {
+                            setState(NewsUiState.Success(news))
+                        } else {
+                            setState(NewsUiState.Empty)
+                        }
                     } else {
-                        _uiState.value = NewsUiState.Error("Failed to load your tech news")
+                        if (result.news.isEmpty()) {
+                            setState(NewsUiState.Error("Failed to load your Tech news please try again later"))
+                        } else {
+                            setState(NewsUiState.Success(result.news)) // emits the old data or cached data basically
+                        }
                     }
-                }
-                .onStart {
-                    _uiState.value = NewsUiState.Loading
-                }
-                .catch { error ->
-                    val message: String =
-                        if (error is SocketTimeoutException) "Please check your internet connection and try again"
-                        else error.message ?: "something went wrong"
-                    println("VM error is ${error.message}")
-                    _uiState.value = NewsUiState.Error(message)
+                }.onStart {
+                    setState(NewsUiState.Loading)
+
+                }.catch { error ->
+                    println("Throwable from fetching tech news is $error")
+                    setState(NewsUiState.Error(error.message ?: "Please check your internet connection and try again"))
 
                 }.collect {}
         }

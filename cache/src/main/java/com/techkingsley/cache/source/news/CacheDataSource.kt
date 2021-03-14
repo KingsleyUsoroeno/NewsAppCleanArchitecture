@@ -1,14 +1,14 @@
 package com.techkingsley.cache.source.news
 
 
-import com.techkingsley.cache.model.CachedBookMarkNews
-import com.techkingsley.cache.model.CachedNews
-import com.techkingsley.cache.model.CachedSearchHistory
+import com.techkingsley.cache.models.CachedBookMarkNews
+import com.techkingsley.cache.models.CachedNews
+import com.techkingsley.cache.models.CachedSearchHistory
 import kotlinx.coroutines.flow.Flow
 
 interface CacheDataSource {
 
-    fun getAllSearchHistory(): Flow<List<CachedSearchHistory>>
+    fun observeSearchHistory(): Flow<List<CachedSearchHistory>>
 
     fun observeAllNews(category: String): Flow<List<CachedNews>>
 
@@ -26,9 +26,9 @@ interface CacheDataSource {
 
     suspend fun deleteBookMarkedNews(bookMarkNews: CachedBookMarkNews)
 
-    fun getBookMarkedNews(): Flow<List<CachedBookMarkNews>>
+    fun observeBookMarkedNews(): Flow<List<CachedBookMarkNews>>
 
-    suspend fun getAllNewsCount(newsCategory: String): Int?
+    suspend fun getAllNewsCountByCategory(newsCategory: String): Int?
 
     suspend fun getNewsByCategory(newsCategory: String): List<CachedNews>
 }

@@ -1,7 +1,7 @@
 package com.techkingsley.data.mapper
 
 import com.techkingsley.data.model.SourceNewsEntity
-import com.techkingsley.domain.entities.news.SourcedNews
+import com.techkingsley.domain.models.news.SourcedNews
 import javax.inject.Inject
 
 class SourceNewsMapper @Inject constructor() : EntityMapper<SourcedNews, SourceNewsEntity> {

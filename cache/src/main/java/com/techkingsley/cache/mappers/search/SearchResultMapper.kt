@@ -1,7 +1,7 @@
 package com.techkingsley.cache.mappers.search
 
 import com.techkingsley.cache.mappers.EntityMapper
-import com.techkingsley.cache.model.CachedSearchHistory
+import com.techkingsley.cache.models.CachedSearchHistory
 import com.techkingsley.data.model.SearchHistoryEntity
 import javax.inject.Inject
 

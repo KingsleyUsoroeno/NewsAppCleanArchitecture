@@ -1,49 +1,54 @@
 package com.techkingsley.presentation.politics
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.techkingsley.domain.entities.params.GetNewsParams
-import com.techkingsley.domain.usecases.news.FetchPoliticalNews
-import com.techkingsley.domain.usecases.news.ObserveNewsByCategory
+import com.techkingsley.domain.models.params.GetNewsParams
+import com.techkingsley.domain.usecases.news.GetNewsByCategory
+import com.techkingsley.presentation.BaseViewModel
 import com.techkingsley.presentation.from
 import com.techkingsley.presentation.newsstate.NewsUiState
 import com.techkingsley.presentation.utils.NewsConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class PoliticalNewsViewModel @Inject constructor(
-    private val fetchPoliticalNews: FetchPoliticalNews,
-    private val observeNews: ObserveNewsByCategory
-) : ViewModel() {
+    private val getNews: GetNewsByCategory
+) : BaseViewModel<NewsUiState>(initialState = NewsUiState.Idle) {
 
-    // Backing property to avoid state updates from other classes
-    private val _uiState = MutableStateFlow<NewsUiState>(NewsUiState.Idle)
+    private val newsCategory: String = NewsConstants.POLITICAL_NEWS
 
-    // The UI collects from this StateFlow to get its state updates
-    val uiState: StateFlow<NewsUiState> = _uiState
+    private val from = Date().from
 
     init {
-        fetchPoliticalNews()
-    }
-
-    private fun fetchPoliticalNews() {
-        viewModelScope.launch {
-            fetchPoliticalNews.execute(GetNewsParams(NewsConstants.POLITICAL_NEWS, Date().from()))
-                .onStart { _uiState.value = NewsUiState.Loading }
-                .map { news ->
-                    if (news.isNullOrEmpty().not()) {
-                        _uiState.value = NewsUiState.Success(news)
+        launchOnUI {
+            getNews.execute(GetNewsParams(newsCategory, from))
+                .map { result ->
+                    val error: Throwable? = result.error
+                    if (error == null) {
+                        val news = result.news
+                        if (news.isNullOrEmpty().not()) {
+                            setState(NewsUiState.Success(news))
+                        } else {
+                            setState(NewsUiState.Empty)
+                        }
                     } else {
-                        _uiState.value = NewsUiState.Error("Failed to load your Political news")
+                        if (result.news.isEmpty()) {
+                            setState(NewsUiState.Error("Failed to load your political news"))
+                        } else {
+                            setState(NewsUiState.Success(result.news)) // emits the old data or cached data basically
+                        }
                     }
-                }
-                .catch { error ->
-                    error.printStackTrace()
-                    _uiState.value = NewsUiState.Error(error.message ?: "Something went wrong")
+                }.onStart {
+                    setState(NewsUiState.Loading)
+
+                }.catch { error ->
+                    println("Throwable from fetching political news is $error")
+                    setState(NewsUiState.Error(error.message ?: ""))
+
                 }.collect {}
         }
     }

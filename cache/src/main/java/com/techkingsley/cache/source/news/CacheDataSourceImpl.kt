@@ -1,18 +1,17 @@
 package com.techkingsley.cache.source.news
 
 import com.techkingsley.cache.db.NewsDatabase
-import com.techkingsley.cache.model.CachedBookMarkNews
-import com.techkingsley.cache.model.CachedNews
-import com.techkingsley.cache.model.CachedSearchHistory
+import com.techkingsley.cache.models.CachedBookMarkNews
+import com.techkingsley.cache.models.CachedNews
+import com.techkingsley.cache.models.CachedSearchHistory
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CacheDataSourceImpl @Inject constructor(
     private val db: NewsDatabase
-    //private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : CacheDataSource {
 
-    override fun getAllSearchHistory(): Flow<List<CachedSearchHistory>> {
+    override fun observeSearchHistory(): Flow<List<CachedSearchHistory>> {
         return db.searchHistoryDao().observeSearchHistory()
     }
 
@@ -48,11 +47,11 @@ class CacheDataSourceImpl @Inject constructor(
         db.bookMarkedNewsDao().delete(bookMarkNews)
     }
 
-    override fun getBookMarkedNews(): Flow<List<CachedBookMarkNews>> {
-        return db.bookMarkedNewsDao().getAllBookMarkedNews()
+    override fun observeBookMarkedNews(): Flow<List<CachedBookMarkNews>> {
+        return db.bookMarkedNewsDao().observeBookNews
     }
 
-    override suspend fun getAllNewsCount(newsCategory: String): Int? {
+    override suspend fun getAllNewsCountByCategory(newsCategory: String): Int? {
         return db.newsDao().getCount(newsCategory)
     }
 

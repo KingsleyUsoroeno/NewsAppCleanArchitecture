@@ -11,12 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.databinding.NewsFragmentBinding
-import com.techkingsley.newsappcleanarchitecture.framework.ui.adapter.NewsTagRecyclerAdapter
-import com.techkingsley.newsappcleanarchitecture.framework.ui.movies.MovieFragment
-import com.techkingsley.newsappcleanarchitecture.framework.ui.politics.PoliticalNewsFragment
+import com.techkingsley.newsappcleanarchitecture.framework.adapter.FragmentViewPagerAdapter
+import com.techkingsley.newsappcleanarchitecture.framework.adapter.NewsTagRecyclerAdapter
+import com.techkingsley.newsappcleanarchitecture.framework.ui.news.movies.MovieNewsFragment
+import com.techkingsley.newsappcleanarchitecture.framework.ui.news.politics.PoliticalNewsFragment
+import com.techkingsley.newsappcleanarchitecture.framework.ui.news.technology.TechnologyNewsFragment
+import com.techkingsley.newsappcleanarchitecture.framework.ui.news.trending.TrendingNewsFragment
 import com.techkingsley.newsappcleanarchitecture.framework.ui.search.SearchActivity
-import com.techkingsley.newsappcleanarchitecture.framework.ui.technology.TechnologyNewsFragment
-import com.techkingsley.newsappcleanarchitecture.framework.ui.trending.TrendingNewsFragment
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -74,7 +75,7 @@ class NewsFragment : Fragment(R.layout.news_fragment) {
             TechnologyNewsFragment.newInstance(),
             TrendingNewsFragment.newInstance(),
             PoliticalNewsFragment.newInstance(),
-            MovieFragment.newInstance()
+            MovieNewsFragment.newInstance()
         )
         val fragmentAdapter = FragmentViewPagerAdapter(fragments, requireActivity())
         fragmentContainer.isUserInputEnabled = false

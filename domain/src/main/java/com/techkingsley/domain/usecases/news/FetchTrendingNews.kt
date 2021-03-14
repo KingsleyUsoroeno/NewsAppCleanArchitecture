@@ -1,11 +1,12 @@
 package com.techkingsley.domain.usecases.news
 
 import com.ezike.tobenna.starwarssearch.domain.executor.PostExecutionThread
-import com.techkingsley.domain.base.FlowUseCase
-import com.techkingsley.domain.entities.news.SourcedNews
+import com.techkingsley.domain.models.news.SourcedNews
 import com.techkingsley.domain.repositories.NewsRepository
+import com.techkingsley.domain.usecases.base.FlowUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class FetchTrendingNews @Inject constructor(
@@ -17,6 +18,8 @@ class FetchTrendingNews @Inject constructor(
         get() = postExecutionThread.io
 
     override fun execute(params: Nothing?): Flow<List<SourcedNews>> {
-        return newsRepository.fetchTrendingNews()
+        return flow {
+            emit(newsRepository.fetchTrendingNews())
+        }
     }
 }

@@ -15,12 +15,12 @@ import javax.inject.Inject
 class CacheRepositoryImpl @Inject constructor(
     private val cacheDataSource: CacheDataSource,
     private val newsMapper: NewsMapper = NewsMapper(),
-    private val searchResultMapper: SearchResultMapper = SearchResultMapper(),
-    private val bookMarkNewsMapper: BookMarkNewsMapper = BookMarkNewsMapper()
+    private val searchResultMapper: SearchResultMapper,
+    private val bookMarkNewsMapper: BookMarkNewsMapper
 ) : CacheNewsRepository {
 
     override fun getSearchHistory(): Flow<List<SearchHistoryEntity>> {
-        return cacheDataSource.getAllSearchHistory().map { cachedSearchHistory ->
+        return cacheDataSource.observeSearchHistory().map { cachedSearchHistory ->
             cachedSearchHistory.map { searchResultMapper.mapFromCached(it) }
         }
     }
@@ -59,14 +59,14 @@ class CacheRepositoryImpl @Inject constructor(
     }
 
     override fun getAllBookMarkedNews(): Flow<List<BookMarkNewsEntity>> {
-        return this.cacheDataSource.getBookMarkedNews().map { cachedBookMarkedNews ->
-            cachedBookMarkedNews.map { bookMarkNewsMapper.mapFromCached(it) }
+        return this.cacheDataSource.observeBookMarkedNews().map { cachedBookMarkedNews ->
+            bookMarkNewsMapper.mapToEntityList(cachedBookMarkedNews)
         }
     }
 
     override suspend fun isNewsCached(newsCategory: String): Boolean {
-        val newsCount = cacheDataSource.getAllNewsCount(newsCategory)
-        return !(newsCount == null || newsCount == 0)
+        val newsCount = cacheDataSource.getAllNewsCountByCategory(newsCategory)
+        return !(newsCount == null || newsCount > 0)
     }
 
     override suspend fun getNewsByCategory(newsCategory: String): List<NewsEntity> {

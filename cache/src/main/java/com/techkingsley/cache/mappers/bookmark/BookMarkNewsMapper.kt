@@ -1,7 +1,7 @@
 package com.techkingsley.cache.mappers.bookmark
 
 import com.techkingsley.cache.mappers.EntityMapper
-import com.techkingsley.cache.model.CachedBookMarkNews
+import com.techkingsley.cache.models.CachedBookMarkNews
 import com.techkingsley.data.model.BookMarkNewsEntity
 import javax.inject.Inject
 

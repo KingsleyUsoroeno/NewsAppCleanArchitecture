@@ -1,6 +1,7 @@
 package com.techkingsley.cache.mappers.news
 
-import com.techkingsley.cache.model.CachedNews
+import com.techkingsley.cache.mappers.NewsEntityMapper
+import com.techkingsley.cache.models.CachedNews
 import com.techkingsley.data.model.NewsEntity
 import javax.inject.Inject
 

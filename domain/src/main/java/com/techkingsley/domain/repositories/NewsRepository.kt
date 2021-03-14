@@ -1,14 +1,15 @@
 package com.techkingsley.domain.repositories
 
-import com.techkingsley.domain.entities.news.News
-import com.techkingsley.domain.entities.news.SourcedNews
-import com.techkingsley.domain.entities.searchhistory.SearchHistory
+import com.techkingsley.domain.models.NewsResult
+import com.techkingsley.domain.models.news.News
+import com.techkingsley.domain.models.news.SourcedNews
+import com.techkingsley.domain.models.searchhistory.SearchHistory
 import kotlinx.coroutines.flow.Flow
 
 /** An abstract definition of a bookRepository used when communicating with the data layer*/
 interface NewsRepository {
 
-    fun getSearchHistory(): Flow<List<SearchHistory>>
+    fun observeSearchHistory(): Flow<List<SearchHistory>>
 
     suspend fun insertSearchHistory(searchHistory: SearchHistory)
 
@@ -20,13 +21,15 @@ interface NewsRepository {
 
     suspend fun deleteAllNews()
 
-    fun observeNewsByCategory(category: String): Flow<List<News>>
+    fun getNewsByCategory(category: String, from: String): Flow<NewsResult>
 
     suspend fun deleteSearchHistory(searchHistory: SearchHistory)
 
-    fun fetchNewsByCategory(category: String, from: String): Flow<List<News>>
+    suspend fun fetchNewsByCategory(category: String, from: String): List<News>
 
-    fun fetchTrendingNews(): Flow<List<SourcedNews>>
+    suspend fun fetchTrendingNews(): List<SourcedNews>
 
     suspend fun searchNews(category: String, from: String): Flow<List<News>>
+
+    fun observeNews(category: String): Flow<List<News>>
 }
