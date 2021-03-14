@@ -3,17 +3,15 @@ package com.techkingsley.newsappcleanarchitecture.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.techkingsley.data.contract.remote.NewsRemoteRepository
 import com.techkingsley.newsappcleanarchitecture.BuildConfig
-import com.techkingsley.newsappcleanarchitecture.business.data.cache.repository.NewsAppRepository
-import com.techkingsley.newsappcleanarchitecture.business.data.network.retrofit.service.NewsApiService
-import com.techkingsley.newsappcleanarchitecture.business.interactors.FetchNews
-import com.techkingsley.newsappcleanarchitecture.framework.datasource.cache.LocalCacheDataSource
-import com.techkingsley.newsappcleanarchitecture.framework.datasource.network.RemoteDataSource
-import com.techkingsley.newsappcleanarchitecture.framework.datasource.network.RemoteDataSourceImpl
+import com.techkingsley.remote.data.repository.NewsRemoteRepositoryImpl
+import com.techkingsley.remote.service.NewsApiService
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -22,53 +20,43 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
-object NetworkModule {
+@InstallIn(SingletonComponent::class)
+interface NetworkModule {
 
-    @Singleton
-    @Provides
-    fun provideGsonBuilder(): Gson {
-        return GsonBuilder().create()
-    }
+    @get:[Binds Singleton]
+    val NewsRemoteRepositoryImpl.newsRepository: NewsRemoteRepository
 
-    @Singleton
-    @Provides
-    fun provideRetrofit(gson: Gson): Retrofit.Builder {
-        val logging = HttpLoggingInterceptor()
-        if (BuildConfig.DEBUG) {
-            logging.level = HttpLoggingInterceptor.Level.BODY
+    companion object {
+        @[Provides Singleton]
+        fun provideGsonBuilder(): Gson {
+            return GsonBuilder().create()
         }
 
-        val httpClient = OkHttpClient.Builder()
-        httpClient.connectTimeout(30, TimeUnit.SECONDS)
-        httpClient.readTimeout(30, TimeUnit.SECONDS)
-        httpClient.addInterceptor(logging)
-        val okHttpClient = httpClient.build()
+        @[Provides Singleton]
+        fun provideRetrofit(gson: Gson): Retrofit.Builder {
+            val logging = HttpLoggingInterceptor()
+            if (BuildConfig.DEBUG) {
+                logging.level = HttpLoggingInterceptor.Level.BODY
+            }
 
-        return Retrofit.Builder()
-            .baseUrl("https://newsapi.org/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-    }
+            val httpClient = OkHttpClient.Builder()
+            httpClient.connectTimeout(30, TimeUnit.SECONDS)
+            httpClient.readTimeout(30, TimeUnit.SECONDS)
+            httpClient.addInterceptor(logging)
+            val okHttpClient = httpClient.build()
 
-    @Singleton
-    @Provides
-    fun provideNewsApiService(retrofit: Retrofit.Builder): NewsApiService {
-        return retrofit
-            .build()
-            .create(NewsApiService::class.java)
-    }
+            return Retrofit.Builder()
+                .baseUrl("https://newsapi.org/")
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+        }
 
-    @Singleton
-    @Provides
-    fun provideNetworkDataSource(service: NewsApiService): RemoteDataSource {
-        return RemoteDataSourceImpl(newsApiService = service)
-    }
-
-    @Singleton
-    @Provides
-    fun provideNewsAppRepository(fetchNews: FetchNews, localCacheDataSource: LocalCacheDataSource): NewsAppRepository {
-        return NewsAppRepository(fetchNews = fetchNews, localCacheDataSource = localCacheDataSource)
+        @[Provides Singleton]
+        fun provideNewsApiService(retrofit: Retrofit.Builder): NewsApiService {
+            return retrofit
+                .build()
+                .create(NewsApiService::class.java)
+        }
     }
 }
 

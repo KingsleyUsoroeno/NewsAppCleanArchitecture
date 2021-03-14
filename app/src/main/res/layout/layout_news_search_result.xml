@@ -6,11 +6,11 @@
 
         <variable
             name="news"
-            type="com.techkingsley.newsappcleanarchitecture.business.data.network.retrofit.model.NewsNetworkEntity" />
+            type="com.techkingsley.domain.models.news.News" />
 
         <variable
             name="resultCallback"
-            type="com.techkingsley.newsappcleanarchitecture.framework.presentation.adapter.SearchResultAdapter.OnItemClickedListener" />
+            type="com.techkingsley.newsappcleanarchitecture.framework.adapter.SearchResultAdapter.OnItemClickedListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -94,7 +94,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="?attr/selectableItemBackground"
-            android:onClick="@{() -> resultCallback.onSearchResultClicked(news)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

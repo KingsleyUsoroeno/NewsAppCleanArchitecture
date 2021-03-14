@@ -5,15 +5,15 @@ apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.0"
+    compileSdkVersion Constants.compileSdkVersion
+    buildToolsVersion Constants.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.techkingsley.newsappcleanarchitecture"
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        applicationId(Constants.applicationId)
+        minSdkVersion(Constants.minSdkVersion)
+        targetSdkVersion(Constants.targetSdkVersion)
+        versionCode(Constants.versionCode)
+        versionName(Constants.versionName)
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -27,7 +27,7 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility "1.8"
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
@@ -42,71 +42,66 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation(Libraries.kotlin)
+    implementation(Libraries.coroutinesCore)
+    implementation(Libraries.coroutines)
+    implementation(Libraries.constraintLayout)
+    testImplementation(Libraries.Junit)
+    implementation(Libraries.lifeCycleExtensions)
+    implementation(Libraries.viewModelKtx)
+    implementation(Libraries.androidXCore)
+    implementation(Libraries.fragmentKtx)
+    implementation(Libraries.fragmentNavigation)
+    implementation(Libraries.lifecycleLiveData)
+    implementation('androidx.appcompat:appcompat:1.2.0')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation('androidx.test.ext:junit:1.1.2')
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.3.0')
 
-    def kotlin_ktx = "1.3.1"
-    implementation "androidx.core:core-ktx:$kotlin_ktx"
+    implementation project(':data')
+    implementation project(':domain')
+    implementation project(':cache')
+    implementation project(':remote')
+    implementation project(':presentation')
 
-    def fragment_ktx = "1.2.5"
-    implementation "androidx.fragment:fragment-ktx:$fragment_ktx"
+    implementation(Libraries.timberVersion)
+    implementation(Libraries.javaxInject)
+    implementation(Cache.room)
+    kapt(Cache.roomCompiler)
+    implementation(Cache.roomCoroutines)
 
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
-
-    def room = "2.2.5"
-    implementation "androidx.room:room-runtime:$room"
-    implementation "androidx.room:room-ktx:$room"
-    kapt "androidx.room:room-compiler:$room"
-
-    def retrofit = "2.9.0"
-    implementation "com.squareup.retrofit2:retrofit:$retrofit"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.7.2"
-
-    // Kotlin
-    def nav_version = "2.3.0"
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-
-    def hilt_version = "2.28-alpha"
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-
-    // DAGGER HILT AND VIEW MODEL
-    def hilt_viewmodels = "1.0.0-alpha01"
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodels"
-    kapt "androidx.hilt:hilt-compiler:$hilt_viewmodels"
+    implementation(Network.retrofit)
+    implementation(Network.retrofitGson)
+    implementation(Network.loggingInterceptor)
+    implementation(Network.okHttp)
+    implementation(Network.retrofitScalars)
 
     // MATERIAL DESIGN
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation(Libraries.materialDesign)
 
     // VIEW PAGER 2
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
-
-    // CHROME EXTENSION FOR VIEWING DATABASE
-    implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation(Libraries.viewPager2)
 
     // IMAGE LOADING
-    def glide = "4.11.0"
-    implementation "com.github.bumptech.glide:glide:$glide"
-    kapt "com.github.bumptech.glide:compiler:$glide"
+    implementation(Libraries.glideVersion)
+    kapt(Libraries.glideCompiler)
 
     // SEARCH_VIEW
-    implementation 'com.miguelcatalan:materialsearchview:1.4.0'
+    implementation(Libraries.materialSearchView)
 
     // WorkManager
-    def work_version = "2.4.0"
-    implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation(Libraries.workManager)
 
-    implementation 'androidx.hilt:hilt-work:1.0.0-alpha01'
-    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha01'
+    implementation(Libraries.hiltAndroid)
+    kapt(Libraries.hiltAndroidCompiler)
+
+    implementation(Libraries.hiltWorker)
+
     // When using Kotlin.
+    kapt(Libraries.hiltWorkerCompiler)
+    implementation(Libraries.hiltViewModel)
+    kapt(Libraries.hiltViewModelCompiler)
+
+    implementation(Libraries.workManager)
+    kapt(Libraries.workManagerCompiler)
 }

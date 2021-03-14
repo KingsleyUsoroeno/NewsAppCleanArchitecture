@@ -7,7 +7,7 @@
 
         <variable
             name="techViewModel"
-            type="com.techkingsley.newsappcleanarchitecture.framework.presentation.technology.TechnologyNewsViewModel" />
+            type="com.techkingsley.presentation.technology.TechnologyNewsViewModel" />
 
         <variable
             name="view"
@@ -17,14 +17,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".framework.presentation.technology.TechnologyNewsFragment">
+        tools:context=".framework.ui.news.technology.TechnologyNewsFragment">
 
         <ProgressBar
             android:id="@+id/loading_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="@{techViewModel.techNews == null ? view.VISIBLE : view.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,12 +35,27 @@
             android:layout_height="0dp"
             android:clipToPadding="false"
             android:orientation="vertical"
+            tools:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/layout_news" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tx_error_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:gravity="center"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Error Message comes here" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

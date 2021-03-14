@@ -9,4 +9,5 @@
     <string name="search_hint">Search for news categories e.g politics</string>
     <string name="app_label">NewsApp</string>
     <string name="news_failed_exception">Failed to fetch your news category please check your internet connection and try again</string>
+    <string name="news_error_message">Failed to load your news feed, please try again</string>
 </resources>

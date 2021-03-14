@@ -6,11 +6,11 @@
     <data>
         <variable
             name="searchHistory"
-            type="com.techkingsley.newsappcleanarchitecture.business.data.cache.model.SearchHistory" />
+            type="com.techkingsley.domain.models.searchhistory.SearchHistory" />
 
         <variable
             name="onItemClickListener"
-            type="com.techkingsley.newsappcleanarchitecture.framework.presentation.adapter.SearchHistoryAdapter.OnItemClickedListener" />
+            type="com.techkingsley.newsappcleanarchitecture.framework.adapter.SearchHistoryAdapter.OnItemClickedListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,11 +36,9 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{() -> onItemClickListener.onDeleteSearchHistoryClicked(searchHistory)}"
             app:layout_constraintBottom_toBottomOf="@id/textViewSearchQuery"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/textViewSearchQuery"
             app:srcCompat="@drawable/ic_delete" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
