@@ -7,10 +7,6 @@
         <variable
             name="news"
             type="com.techkingsley.domain.models.news.News" />
-
-        <variable
-            name="resultCallback"
-            type="com.techkingsley.newsappcleanarchitecture.framework.adapter.SearchResultAdapter.OnItemClickedListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,15 +27,6 @@
             android:layout_marginEnd="8dp"
             android:orientation="vertical"
             app:layout_constraintGuide_end="8dp" />
-
-        <!--<ImageView
-            android:id="@+id/play_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            app:layout_constraintStart_toStartOf="@+id/left_well"
-            app:layout_constraintTop_toBottomOf="@+id/video_thumbnail"
-            app:srcCompat="@drawable/ic_play_circle_outline_black_48dp" />-->
 
         <TextView
             android:id="@+id/title"

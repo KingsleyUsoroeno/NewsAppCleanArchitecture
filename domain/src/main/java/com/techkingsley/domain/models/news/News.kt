@@ -6,5 +6,7 @@ data class News(
     val title: String?,
     val description: String?,
     val newsUrl: String?,
-    val urlToImage: String? = ""
+    val urlToImage: String? = "",
+    val id: Long,
+    val isBookmarked: Boolean
 )

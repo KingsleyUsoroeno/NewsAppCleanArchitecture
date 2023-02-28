@@ -10,7 +10,7 @@
 
         <variable
             name="onItemClickListener"
-            type="com.techkingsley.newsappcleanarchitecture.framework.adapter.SearchHistoryAdapter.OnItemClickedListener" />
+            type="com.techkingsley.newsappcleanarchitecture.feature_search.adapter.SearchHistoryAdapter.OnItemClickedListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

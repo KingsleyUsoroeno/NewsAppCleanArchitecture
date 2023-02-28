@@ -1,4 +1,4 @@
-package com.ezike.tobenna.starwarssearch.domain.executor
+package com.techkingsley.domain.executor
 
 import kotlinx.coroutines.CoroutineDispatcher
 

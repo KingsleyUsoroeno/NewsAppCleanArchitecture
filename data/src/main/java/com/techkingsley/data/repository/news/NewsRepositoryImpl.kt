@@ -7,7 +7,6 @@ import com.techkingsley.data.mapper.SearchedNewsMapper
 import com.techkingsley.data.mapper.SourceNewsMapper
 import com.techkingsley.data.model.NewsEntity
 import com.techkingsley.data.model.SourceNewsEntity
-import com.techkingsley.domain.models.NewsResult
 import com.techkingsley.domain.models.news.News
 import com.techkingsley.domain.models.news.SourcedNews
 import com.techkingsley.domain.models.searchhistory.SearchHistory
@@ -24,56 +23,52 @@ class NewsRepositoryImpl @Inject constructor(
 ) : NewsRepository {
 
     override fun observeSearchHistory(): Flow<List<SearchHistory>> {
-        return this.cacheNewsRepository.getSearchHistory().map { search ->
-            search.map { searchHistoryMapper.mapToDomain(it) }
-        }
+        return cacheNewsRepository.getSearchHistory().map { searchHistoryMapper.mapToDomainList(it) }
+    }
+
+    override fun observeBookmarkedNews(): Flow<List<News>> {
+        return cacheNewsRepository.observeBookmarkedNews().map { newsMapper.mapToDomainList(it) }
     }
 
     override suspend fun insertSearchHistory(searchHistory: SearchHistory) {
-        this.cacheNewsRepository.addSearchHistory(
-            searchHistory = searchHistoryMapper.mapFromDomain(searchHistory)
-        )
+        cacheNewsRepository.addSearchHistory(searchHistoryMapper.mapFromDomain(searchHistory))
     }
 
-    override suspend fun insertNews(news: News) {
-        throw UnsupportedOperationException()
-    }
-
-    override suspend fun insertAllNews(category: String, news: List<News>) {
-        val newsEntity = news.map { newsMapper.mapFromDomain(it) }
-        this.cacheNewsRepository.insertNews(category, newsEntity)
+    override suspend fun insertAllNews(news: List<News>) {
+        cacheNewsRepository.insertNews(newsMapper.mapFromDomainList(news))
     }
 
     override suspend fun deleteNews(news: News) {
-        this.cacheNewsRepository.deleteNews(news.category, newsMapper.mapFromDomain(news))
+        cacheNewsRepository.deleteNews(news.id)
     }
 
     override suspend fun deleteAllNews() {
-        this.cacheNewsRepository.deleteAllNews()
+        cacheNewsRepository.deleteAllNews()
     }
 
-    override fun getNewsByCategory(category: String, from: String): Flow<NewsResult> {
+    override fun observeNewsByCategory(category: String, from: String): Flow<List<News>> {
         return flow {
-            fetchNewsAndCache(category, from)
-            emitAll(cacheNewsRepository.observeAllNews(category).map { news ->
-                NewsResult(newsMapper.mapToDomainList(news))
-            })
+            if (cacheNewsRepository.getTotalNewsCount() > 0) {
+                val cachedMovies = cacheNewsRepository.getNewsByCategory(category)
+                emit(newsMapper.mapToDomainList(cachedMovies))
+
+            } else {
+                val trendingNews = newsRemoteRepository.fetchNewsByCategory("trending", from)
+                val movieNews = newsRemoteRepository.fetchNewsByCategory("movies", from)
+                val allNews = trendingNews + movieNews
+                cacheNewsRepository.insertNews(allNews)
+
+                val cachedMovies = cacheNewsRepository.getNewsByCategory(category)
+                emit(newsMapper.mapToDomainList(cachedMovies))
+            }
         }.catch { cause: Throwable ->
-            val cachedNews = cacheNewsRepository.getNewsByCategory(category)
-            emit(NewsResult(newsMapper.mapToDomainList(cachedNews), cause))
+            if (cacheNewsRepository.getTotalNewsCount() <= 0) throw cause
+            emit(newsMapper.mapToDomainList(cacheNewsRepository.getNewsByCategory(category)))
         }
     }
 
     override suspend fun deleteSearchHistory(searchHistory: SearchHistory) {
-        this.cacheNewsRepository.deleteSearchHistory(
-            searchHistory =
-            searchHistoryMapper.mapFromDomain(searchHistory)
-        )
-    }
-
-    override suspend fun fetchNewsByCategory(category: String, from: String): List<News> {
-        val news: List<NewsEntity> = newsRemoteRepository.fetchNewsByCategory(category, from)
-        return newsMapper.mapToDomainList(news)
+        cacheNewsRepository.deleteSearchHistory(searchHistoryMapper.mapFromDomain(searchHistory))
     }
 
     override suspend fun fetchTrendingNews(): List<SourcedNews> {
@@ -88,18 +83,23 @@ class NewsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun observeNews(category: String): Flow<List<News>> {
-        return cacheNewsRepository.observeAllNews(category).map { newsMapper.mapToDomainList(it) }
+    override suspend fun getNewsByCategory(category: String): List<News> {
+        return newsMapper.mapToDomainList(cacheNewsRepository.getNewsByCategory(category))
     }
 
-    private suspend fun fetchNewsAndCache(category: String, from: String) {
-        try {
-            val news = fetchNewsByCategory(category = category, from = from)
-            if (news.isNullOrEmpty().not()) {
-                cacheNewsRepository.insertNews(category, newsMapper.mapFromDomainList(news))
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+    override suspend fun bookmarkNews(newsId: Long) {
+        cacheNewsRepository.bookMarkNews(newsId)
+    }
+
+    override suspend fun removeNewsFromBookmarks(newsId: Long) {
+        cacheNewsRepository.removeNewsBookmarkStatus(newsId)
+    }
+
+    override suspend fun saveOrRemoveNewsFromBookmarks(news: News) {
+        if (news.isBookmarked) {
+            cacheNewsRepository.removeNewsBookmarkStatus(news.id)
+        } else {
+            cacheNewsRepository.bookMarkNews(news.id)
         }
     }
 }

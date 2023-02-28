@@ -11,13 +11,10 @@ import javax.inject.Inject
 
 class NewsRemoteRepositoryImpl @Inject constructor(
     private val newsApiService: NewsApiService,
-    private val newsEntityMapper: NewsEntityMapper,
-    private val trendingNewsMapper: TrendingNewsMapper
+    private val newsEntityMapper: NewsEntityMapper = NewsEntityMapper(),
+    private val trendingNewsMapper: TrendingNewsMapper = TrendingNewsMapper(),
+    private val apiKey: String
 ) : NewsRemoteRepository {
-
-    private val apiKey: String = RemoteConstants.API_KEY
-
-    private val publishedAt: String = RemoteConstants.PUBLISHED_AT
 
     override suspend fun fetchTrendingNews(): List<SourceNewsEntity> {
         val trendingNews = newsApiService.getTrendingNews(apiKey)
@@ -25,7 +22,7 @@ class NewsRemoteRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchNewsByCategory(category: String, from: String): List<NewsEntity> {
-        val news = newsApiService.getNewsByCategory(category, from, publishedAt, apiKey)
+        val news = newsApiService.getNewsByCategory(category, from, "publishedAt", apiKey)
         return newsEntityMapper.mapFromRemote(category, news)
     }
 }
