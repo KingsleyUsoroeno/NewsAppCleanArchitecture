@@ -1,12 +1,12 @@
 package com.techkingsley.remote.mapper.trending
 
 import com.techkingsley.data.model.SourceNewsEntity
-import com.techkingsley.remote.data.model.SourceNewsResponse
+import com.techkingsley.remote.data.model.SourceNewsResponseDto
 import javax.inject.Inject
 
-class TrendingNewsMapper @Inject constructor() : TrendingEntityMapper<SourceNewsResponse, List<SourceNewsEntity>> {
+class TrendingNewsMapper @Inject constructor() : TrendingEntityMapper<SourceNewsResponseDto, List<SourceNewsEntity>> {
 
-    override fun mapFromRemote(type: SourceNewsResponse): List<SourceNewsEntity> {
+    override fun mapFromRemote(type: SourceNewsResponseDto): List<SourceNewsEntity> {
         return with(type) {
             articles.map {
                 SourceNewsEntity(

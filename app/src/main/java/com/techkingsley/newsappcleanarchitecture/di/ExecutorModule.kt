@@ -1,6 +1,6 @@
 package com.techkingsley.newsappcleanarchitecture.di
 
-import com.ezike.tobenna.starwarssearch.domain.executor.PostExecutionThread
+import com.techkingsley.domain.executor.PostExecutionThread
 import com.techkingsley.newsappcleanarchitecture.executor.PostExecutionThreadImpl
 import dagger.Binds
 import dagger.Module

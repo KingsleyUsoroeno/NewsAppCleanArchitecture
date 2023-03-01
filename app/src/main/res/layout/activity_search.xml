@@ -2,23 +2,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-    <data>
-
-        <variable
-            name="searchActivityViewModel"
-            type="com.techkingsley.presentation.search.SearchViewModel" />
-
-        <variable
-            name="view"
-            type="android.view.View" />
-    </data>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context=".framework.ui.search.SearchActivity">
+        tools:context=".feature_search.SearchActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -64,7 +52,7 @@
                 android:layout_height="0dp"
                 android:layout_below="@id/search_view"
                 android:orientation="vertical"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/search_view"

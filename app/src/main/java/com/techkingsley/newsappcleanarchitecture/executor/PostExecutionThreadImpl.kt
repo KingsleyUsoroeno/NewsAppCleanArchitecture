@@ -1,6 +1,6 @@
 package com.techkingsley.newsappcleanarchitecture.executor
 
-import com.ezike.tobenna.starwarssearch.domain.executor.PostExecutionThread
+import com.techkingsley.domain.executor.PostExecutionThread
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject

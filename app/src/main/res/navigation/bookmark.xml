@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bookmark"
-    app:startDestination="@id/trendingNewsFragment">
+    app:startDestination="@id/newsBookmarkedFragment">
 
     <fragment
-        android:id="@+id/trendingNewsFragment"
-        android:name="com.techkingsley.newsappcleanarchitecture.framework.ui.news.trending.TrendingNewsFragment"
-        android:label="trending_news_fragment"
-        tools:layout="@layout/trending_news_fragment" />
+        android:id="@+id/newsBookmarkedFragment"
+        android:name="com.techkingsley.newsappcleanarchitecture.feature_bookmarks.NewsBookmarkedFragment"
+        android:label="fragment_news_bookmarked"
+        tools:layout="@layout/fragment_news_bookmarked" />
 </navigation>

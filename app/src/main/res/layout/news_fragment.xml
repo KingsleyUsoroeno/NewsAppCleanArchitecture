@@ -9,11 +9,12 @@
         android:background="@color/white"
         android:fillViewport="true"
         android:fitsSystemWindows="true"
-        tools:context=".framework.ui.news.NewsFragment">
+        tools:context=".feature_news.NewsFragment">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/newsFragmentToolbar"
@@ -30,74 +31,112 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:fontFamily="@font/proxima_nova_bold"
                     android:text="Feed"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
             </com.google.android.material.appbar.MaterialToolbar>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/bannerLayout"
-                android:layout_width="0dp"
-                android:layout_height="186dp"
-                android:layout_marginLeft="10dp"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/white_rounded_drawable"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/newsFragmentToolbar">
+                android:layout_marginEnd="12dp"
+                android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/bannerImageView"
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/trendingNewsChip"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="34dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
                     android:background="@drawable/white_rounded_drawable"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/banner_image"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:backgroundTint="@color/colorAccent"
+                    android:gravity="center">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/proxima_nova"
+                        android:gravity="center"
+                        android:text="@string/trending"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/politicsNewsChip"
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/white_rounded_drawable"
+                    android:backgroundTint="@color/colorAccent"
+                    android:gravity="center">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/proxima_nova"
+                        android:text="@string/politics"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/technologyNewsChip"
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/white_rounded_drawable"
+                    android:backgroundTint="@color/colorAccent"
+                    android:gravity="center">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/proxima_nova"
+                        android:text="@string/technology"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/moviesChip"
+                android:layout_width="111dp"
+                android:layout_height="34dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/white_rounded_drawable"
+                android:backgroundTint="@color/colorAccent"
+                android:gravity="center">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="Avengers Endgame Has Made $1 Billion, How Much It Should Make To.... "
+                    android:fontFamily="@font/proxima_nova"
+                    android:gravity="center"
+                    android:text="@string/movies"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    android:textSize="16sp" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/newsTagRecyclerView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:clipToPadding="false"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="@id/bannerLayout"
-                app:layout_constraintStart_toStartOf="@id/bannerLayout"
-                app:layout_constraintTop_toBottomOf="@id/bannerLayout"
-                tools:listitem="@layout/layout_news_tag" />
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/fragmentContainer"
-                android:layout_width="0dp"
+            <include
+                android:id="@+id/newsLayout"
+                layout="@layout/layout_news_renderer"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/newsTagRecyclerView" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginTop="14dp"
+                android:layout_weight="1" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>
 </layout>

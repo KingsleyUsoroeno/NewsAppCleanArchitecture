@@ -1,5 +1,6 @@
 package com.techkingsley.data.mapper
 
+import com.techkingsley.data.mapper.base.EntityMapper
 import com.techkingsley.data.model.SourceNewsEntity
 import com.techkingsley.domain.models.news.SourcedNews
 import javax.inject.Inject

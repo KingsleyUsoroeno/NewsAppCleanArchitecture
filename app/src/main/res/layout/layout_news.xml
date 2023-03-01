@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="news"
             type="com.techkingsley.domain.models.news.News" />
@@ -12,8 +11,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_height="125dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/gray_rounded_drawable">
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -31,12 +32,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/proxima_nova_bold"
             android:gravity="start"
             android:text="@{news.title}"
             android:textColor="@color/primaryTextColor"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/newsImage"
             app:layout_constraintTop_toTopOf="@id/newsImage"
@@ -48,66 +52,30 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ellipsize="end"
+            android:fontFamily="@font/proxima_nova"
             android:gravity="start"
             android:maxLines="2"
             android:text="@{news.description}"
             android:textColor="@color/primaryTextColor"
-            android:textSize="16sp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/newsTitle"
             app:layout_constraintTop_toBottomOf="@id/newsTitle"
             tools:text="Trending Nancy Pelosi accuses Attorney General Bill Barr." />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/iconBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="start"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/newsTitle"
-            app:layout_constraintTop_toBottomOf="@id/newsDescription">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="20dp"
-                app:srcCompat="@drawable/ic_shield" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="20dp"
-                app:srcCompat="@drawable/ic_bookmark" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                app:srcCompat="@drawable/ic_upload" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imgClockTimeImage"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iconBox"
-            app:layout_constraintTop_toTopOf="@id/iconBox"
-            app:srcCompat="@drawable/ic_clock_time" />
-
-        <TextView
-            android:id="@+id/textNewsReadTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="4 mins"
-            app:layout_constraintBottom_toBottomOf="@id/imgClockTimeImage"
-            app:layout_constraintStart_toEndOf="@id/imgClockTimeImage"
-            app:layout_constraintTop_toTopOf="@id/imgClockTimeImage" />
+            android:id="@+id/bookmarkIcon"
+            android:layout_width="24dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_height="24dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/newsDescription"
+            app:layout_constraintTop_toBottomOf="@id/newsDescription"
+            app:setImageDrawable="@{news.bookmarked ? @drawable/ic_baseline_bookmark : @drawable/ic_bookmark}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

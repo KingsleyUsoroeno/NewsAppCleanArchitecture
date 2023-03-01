@@ -10,4 +10,8 @@
     <string name="app_label">NewsApp</string>
     <string name="news_failed_exception">Failed to fetch your news category please check your internet connection and try again</string>
     <string name="news_error_message">Failed to load your news feed, please try again</string>
+    <string name="technology">Technology</string>
+    <string name="politics">Politics</string>
+    <string name="movies">Movies</string>
+    <string name="txt_your_bookmarked_news_will_appear_here">Your bookmarked news\n will appear here</string>
 </resources>

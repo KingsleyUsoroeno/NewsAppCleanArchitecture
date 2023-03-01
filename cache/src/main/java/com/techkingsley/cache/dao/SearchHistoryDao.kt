@@ -2,12 +2,13 @@ package com.techkingsley.cache.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.techkingsley.cache.models.CachedSearchHistory
+import com.techkingsley.cache.dao.base.BaseDao
+import com.techkingsley.cache.entities.CacheSearchHistory
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface SearchHistoryDao : BaseDao<CachedSearchHistory> {
+interface SearchHistoryDao : BaseDao<CacheSearchHistory> {
 
-    @Query("SELECT * FROM CachedSearchHistory")
-    fun observeSearchHistory(): Flow<List<CachedSearchHistory>>
+    @Query("SELECT * FROM CacheSearchHistory")
+    fun observeSearchHistory(): Flow<List<CacheSearchHistory>>
 }

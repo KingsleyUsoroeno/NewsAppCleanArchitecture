@@ -1,5 +1,6 @@
 package com.techkingsley.data.mapper
 
+import com.techkingsley.data.mapper.base.EntityMapper
 import com.techkingsley.data.model.NewsEntity
 import com.techkingsley.domain.models.news.News
 import javax.inject.Inject
@@ -13,7 +14,10 @@ class NewsMapper @Inject constructor() : EntityMapper<News, NewsEntity> {
             title = type.title,
             description = type.description,
             newsUrl = type.newsUrl,
-            urlToImage = type.urlToImage
+            urlToImage = type.urlToImage,
+            id = type.id,
+            isBookmarked = type.isBookmarked,
+            bookmarkedTimestamp = type.bookmarkedTimestamp
         )
     }
 
@@ -24,7 +28,10 @@ class NewsMapper @Inject constructor() : EntityMapper<News, NewsEntity> {
             title = type.title,
             description = type.description,
             newsUrl = type.newsUrl,
-            urlToImage = type.urlToImage
+            urlToImage = type.urlToImage,
+            isBookmarked = type.isBookmarked,
+            id = type.id,
+            bookmarkedTimestamp = type.bookmarkedTimestamp
         )
     }
 }

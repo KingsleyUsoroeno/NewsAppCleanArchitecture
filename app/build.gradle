@@ -62,7 +62,6 @@ dependencies {
     implementation project(':domain')
     implementation project(':cache')
     implementation project(':remote')
-    implementation project(':presentation')
 
     implementation(Libraries.timberVersion)
     implementation(Libraries.javaxInject)

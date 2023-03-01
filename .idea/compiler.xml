@@ -4,8 +4,9 @@
     <bytecodeTargetLevel target="1.8">
       <module name="NewsAppCleanArchitecture.app" target="11" />
       <module name="NewsAppCleanArchitecture.buildSrc" target="11" />
+      <module name="NewsAppCleanArchitecture.buildSrc.main" target="11" />
+      <module name="NewsAppCleanArchitecture.buildSrc.test" target="11" />
       <module name="NewsAppCleanArchitecture.cache" target="11" />
-      <module name="NewsAppCleanArchitecture.presentation" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
