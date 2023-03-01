@@ -17,7 +17,8 @@ class CacheNewsMapper @Inject constructor() : EntityMapper<CacheNews, NewsEntity
             newsUrl = cache.newsUrl,
             urlToImage = cache.urlToImage,
             isBookmarked = cache.isBookmarked,
-            id = cache.id
+            id = cache.id,
+            bookmarkedTimestamp = cache.bookmarkedTimestamp
         )
     }
 
@@ -30,7 +31,8 @@ class CacheNewsMapper @Inject constructor() : EntityMapper<CacheNews, NewsEntity
             newsUrl = entity.newsUrl ?: "",
             urlToImage = entity.urlToImage ?: "",
             isBookmarked = entity.isBookmarked,
-            id = entity.id
+            id = entity.id,
+            bookmarkedTimestamp = entity.bookmarkedTimestamp
         )
     }
 }

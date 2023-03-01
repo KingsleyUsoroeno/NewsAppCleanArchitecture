@@ -13,6 +13,5 @@
     <string name="technology">Technology</string>
     <string name="politics">Politics</string>
     <string name="movies">Movies</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_your_bookmarked_news_will_appear_here">Your bookmarked news\n will appear here</string>
 </resources>

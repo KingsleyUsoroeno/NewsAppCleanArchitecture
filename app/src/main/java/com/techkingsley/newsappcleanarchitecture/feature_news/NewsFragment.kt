@@ -7,9 +7,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
 import com.techkingsley.domain.models.news.News
 import com.techkingsley.newsappcleanarchitecture.R
 import com.techkingsley.newsappcleanarchitecture.databinding.NewsFragmentBinding
@@ -25,7 +27,7 @@ import timber.log.Timber
 class NewsFragment : Fragment(R.layout.news_fragment) {
 
     private lateinit var viewBinding: NewsFragmentBinding
-    private val viewModel: NewsViewModel by viewModels()
+    private val newsViewModel: NewsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +40,11 @@ class NewsFragment : Fragment(R.layout.news_fragment) {
         (activity as AppCompatActivity?)!!.setSupportActionBar(viewBinding.newsFragmentToolbar)
         (activity as AppCompatActivity?)!!.supportActionBar?.setDisplayShowTitleEnabled(false)
 
+
+        viewBinding.lifecycleOwner = viewLifecycleOwner
+
         lifecycleScope.launchWhenStarted {
-            viewModel.state.collect {
+            newsViewModel.newsUiState.collect {
 
                 viewBinding.newsLayout.loadingSpinner.visibility = if (it.isLoading)
                     View.VISIBLE else View.GONE
@@ -50,23 +55,26 @@ class NewsFragment : Fragment(R.layout.news_fragment) {
                 viewBinding.newsLayout.textErrorMessage.visibility = if (it.throwable != null)
                     View.VISIBLE else View.GONE
 
-                initNewsRecyclerView(it.news)
+                initNewsRecyclerView(it.news.toMutableList())
 
                 viewBinding.newsLayout.textErrorMessage.text = getString(R.string.news_error_message)
+
+                setSelectedBackgroundTint(it.selectedNewsCategory)
             }
         }
 
         with(viewBinding) {
+
             trendingNewsChip.setOnClickListener {
-                viewModel.onNewsCategorySelected(NewsConstants.TRENDING_NEWS)
+                newsViewModel.onNewsCategorySelected(NewsConstants.TRENDING_NEWS)
             }
             politicsNewsChip.setOnClickListener {
-                viewModel.onNewsCategorySelected(NewsConstants.POLITICAL_NEWS)
+                newsViewModel.onNewsCategorySelected(NewsConstants.POLITICAL_NEWS)
             }
             technologyNewsChip.setOnClickListener {
-                viewModel.onNewsCategorySelected(NewsConstants.TECH_NEWS)
+                newsViewModel.onNewsCategorySelected(NewsConstants.TECH_NEWS)
             }
-            moviesChip.setOnClickListener { viewModel.onNewsCategorySelected(NewsConstants.MOVIE_NEWS) }
+            moviesChip.setOnClickListener { newsViewModel.onNewsCategorySelected(NewsConstants.MOVIE_NEWS) }
         }
     }
 
@@ -84,13 +92,26 @@ class NewsFragment : Fragment(R.layout.news_fragment) {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun initNewsRecyclerView(news: List<News>) {
+    private fun initNewsRecyclerView(news: MutableList<News>) {
         with(viewBinding) {
-            val adapter = NewsAdapter(viewModel::toggleNewsBookmarkStatus).apply {
-                submitList(news)
+            val adapter = NewsAdapter(news) {
+                newsViewModel.toggleNewsBookmarkStatus(it) { isBookmarked ->
+                    val message = if (isBookmarked) "News article saved to bookmarks" else "News article removed from bookmarks"
+                    Snackbar.make(viewBinding.root, message, Snackbar.LENGTH_LONG).show()
+                }
             }
             newsLayout.newsRecyclerView.adapter = adapter
             newsLayout.newsRecyclerView.setHasFixedSize(true)
         }
+    }
+
+    private fun setSelectedBackgroundTint(selectedCategory: String) {
+        val accentColor = ContextCompat.getColor(context!!, R.color.colorAccent)
+        val colorPink = ContextCompat.getColor(context!!, R.color.pink_500)
+
+        viewBinding.trendingNewsChip.background.setTint(if (selectedCategory == NewsConstants.TRENDING_NEWS) colorPink else accentColor)
+        viewBinding.politicsNewsChip.background.setTint(if (selectedCategory == NewsConstants.POLITICAL_NEWS) colorPink else accentColor)
+        viewBinding.technologyNewsChip.background.setTint(if (selectedCategory == NewsConstants.TECH_NEWS) colorPink else accentColor)
+        viewBinding.moviesChip.background.setTint(if (selectedCategory == NewsConstants.MOVIE_NEWS) colorPink else accentColor)
     }
 }

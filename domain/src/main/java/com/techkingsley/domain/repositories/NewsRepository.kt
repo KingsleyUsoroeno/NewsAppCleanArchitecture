@@ -26,13 +26,9 @@ interface NewsRepository {
 
     suspend fun fetchTrendingNews(): List<SourcedNews>
 
-    suspend fun searchNews(category: String, from: String): Flow<List<News>>
+    fun searchNews(category: String, from: String): Flow<List<News>>
 
     suspend fun getNewsByCategory(category: String): List<News>
-
-    suspend fun bookmarkNews(newsId: Long)
-
-    suspend fun removeNewsFromBookmarks(newsId: Long)
 
     suspend fun saveOrRemoveNewsFromBookmarks(news: News)
 }

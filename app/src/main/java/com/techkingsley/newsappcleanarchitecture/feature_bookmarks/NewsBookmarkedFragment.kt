@@ -32,17 +32,16 @@ class NewsBookmarkedFragment : Fragment(R.layout.fragment_news_bookmarked) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launchWhenStarted {
             viewModel.bookmarkedNews.collect { bookmarkedNews ->
-                if (bookmarkedNews.isNotEmpty()) {
-                    buildRecyclerView(bookmarkedNews)
-                }
+                buildRecyclerView(bookmarkedNews.asReversed())
             }
         }
-        buildRecyclerView()
     }
 
 
     private fun buildRecyclerView(items: List<News> = emptyList()) {
         val adapter = BookmarkedNewsAdapter().apply { submitList(items) }
         viewBinding.newsBookmarkedRecyclerView.adapter = adapter
+        viewBinding.newsBookmarkedRecyclerView.visibility = if (items.isNotEmpty()) View.VISIBLE else View.GONE
+        viewBinding.emptyBookmarkTextView.visibility = if(items.isEmpty()) View.VISIBLE else View.GONE
     }
 }

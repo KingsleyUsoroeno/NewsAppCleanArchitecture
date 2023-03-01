@@ -23,7 +23,7 @@ class NewsRepositoryImpl @Inject constructor(
 ) : NewsRepository {
 
     override fun observeSearchHistory(): Flow<List<SearchHistory>> {
-        return cacheNewsRepository.getSearchHistory().map { searchHistoryMapper.mapToDomainList(it) }
+        return cacheNewsRepository.observeSearchHistory().map { searchHistoryMapper.mapToDomainList(it) }
     }
 
     override fun observeBookmarkedNews(): Flow<List<News>> {
@@ -48,21 +48,22 @@ class NewsRepositoryImpl @Inject constructor(
 
     override fun observeNewsByCategory(category: String, from: String): Flow<List<News>> {
         return flow {
-            if (cacheNewsRepository.getTotalNewsCount() > 0) {
-                val cachedMovies = cacheNewsRepository.getNewsByCategory(category)
-                emit(newsMapper.mapToDomainList(cachedMovies))
+            if (cacheNewsRepository.hasCachedNewsInDb()) {
+                emit(newsMapper.mapToDomainList(cacheNewsRepository.getNewsByCategory(category)))
 
             } else {
                 val trendingNews = newsRemoteRepository.fetchNewsByCategory("trending", from)
                 val movieNews = newsRemoteRepository.fetchNewsByCategory("movies", from)
-                val allNews = trendingNews + movieNews
+                val techNews = newsRemoteRepository.fetchNewsByCategory("tech", from)
+                val politics = newsRemoteRepository.fetchNewsByCategory("politics", from)
+                val allNews = trendingNews + movieNews + techNews + politics
                 cacheNewsRepository.insertNews(allNews)
 
                 val cachedMovies = cacheNewsRepository.getNewsByCategory(category)
                 emit(newsMapper.mapToDomainList(cachedMovies))
             }
         }.catch { cause: Throwable ->
-            if (cacheNewsRepository.getTotalNewsCount() <= 0) throw cause
+            if (cacheNewsRepository.hasCachedNewsInDb().not()) throw cause
             emit(newsMapper.mapToDomainList(cacheNewsRepository.getNewsByCategory(category)))
         }
     }
@@ -76,7 +77,7 @@ class NewsRepositoryImpl @Inject constructor(
         return sourceNewsMapper.mapToDomainList(trendingNews)
     }
 
-    override suspend fun searchNews(category: String, from: String): Flow<List<News>> {
+    override fun searchNews(category: String, from: String): Flow<List<News>> {
         return flow {
             val news: List<NewsEntity> = newsRemoteRepository.fetchNewsByCategory(category, from)
             emit(newsMapper.mapToDomainList(news))
@@ -87,19 +88,11 @@ class NewsRepositoryImpl @Inject constructor(
         return newsMapper.mapToDomainList(cacheNewsRepository.getNewsByCategory(category))
     }
 
-    override suspend fun bookmarkNews(newsId: Long) {
-        cacheNewsRepository.bookMarkNews(newsId)
-    }
-
-    override suspend fun removeNewsFromBookmarks(newsId: Long) {
-        cacheNewsRepository.removeNewsBookmarkStatus(newsId)
-    }
-
     override suspend fun saveOrRemoveNewsFromBookmarks(news: News) {
         if (news.isBookmarked) {
-            cacheNewsRepository.removeNewsBookmarkStatus(news.id)
+            cacheNewsRepository.removeNewsBookmarkStatus(newsMapper.mapFromDomain(news))
         } else {
-            cacheNewsRepository.bookMarkNews(news.id)
+            cacheNewsRepository.bookMarkNews(newsMapper.mapFromDomain(news))
         }
     }
 }

@@ -2,6 +2,7 @@ package com.techkingsley.remote.mapper.news
 
 import com.techkingsley.data.model.NewsEntity
 import com.techkingsley.remote.data.model.NewsResponseDto
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -20,7 +21,8 @@ class NewsEntityMapper @Inject constructor() : EntityMapper<NewsResponseDto, Lis
                 newsUrl = it.newsUrl,
                 urlToImage = it.urlToImage,
                 id = 0,
-                isBookmarked = false
+                isBookmarked = false,
+                bookmarkedTimestamp = Date()
             )
         }
     }

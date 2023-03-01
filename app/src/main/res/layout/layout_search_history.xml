@@ -7,10 +7,6 @@
         <variable
             name="searchHistory"
             type="com.techkingsley.domain.models.searchhistory.SearchHistory" />
-
-        <variable
-            name="onItemClickListener"
-            type="com.techkingsley.newsappcleanarchitecture.feature_search.adapter.SearchHistoryAdapter.OnItemClickedListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,8 +28,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imgDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:clickable="true"
             android:focusable="true"
             app:layout_constraintBottom_toBottomOf="@id/textViewSearchQuery"

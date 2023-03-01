@@ -9,15 +9,10 @@ import com.techkingsley.newsappcleanarchitecture.databinding.LayoutSearchHistory
 
 
 class SearchHistoryAdapter(
-    private val onItemClickedListener: OnItemClickedListener,
+    private val onSearchHistoryClicked: (SearchHistory) -> Unit,
+    private val onDeleteSearchHistory: (SearchHistory) -> Unit,
     private val searchHistory: List<SearchHistory>
 ) : RecyclerView.Adapter<SearchHistoryAdapter.SearchHistoryViewHolder>() {
-
-
-    interface OnItemClickedListener {
-        fun onSearchHistoryClicked(searchHistory: SearchHistory)
-        fun onDeleteSearchHistoryClicked(searchHistory: SearchHistory)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHistoryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_search_history, parent, false)
@@ -37,8 +32,8 @@ class SearchHistoryAdapter(
         fun updateSearchHistory(history: SearchHistory) {
             with(viewBinding) {
                 this.searchHistory = history
-                this.onItemClickListener = onItemClickedListener
-                root.setOnClickListener { onItemClickedListener.onSearchHistoryClicked(history) }
+                root.setOnClickListener { onSearchHistoryClicked(history) }
+                imgDelete.setOnClickListener { onDeleteSearchHistory(history) }
                 executePendingBindings()
             }
         }

@@ -3,9 +3,11 @@ package com.techkingsley.newsappcleanarchitecture.feature_search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.techkingsley.domain.models.news.News
 import com.techkingsley.domain.models.searchhistory.SearchHistory
 import com.techkingsley.domain.repositories.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,7 +19,10 @@ class SearchViewModel @Inject constructor(
     private val newsRepository: NewsRepository
 ) : ViewModel() {
 
-    val allSearchHistory = newsRepository.observeSearchHistory().asLiveData()
+    private val _searchResultState = MutableStateFlow<SearchScreenResult>(SearchScreenResult.Idle)
+    val searchResultState get() = _searchResultState.asStateFlow()
+
+    val allSearchHistory: Flow<List<SearchHistory>> = newsRepository.observeSearchHistory()
 
     fun addSearchHistory(searchHistory: SearchHistory) {
         viewModelScope.launch { newsRepository.insertSearchHistory(searchHistory) }
@@ -32,23 +37,25 @@ class SearchViewModel @Inject constructor(
 
     /*its a good practise to log the error and provide the user with a feedback on the UI*/
     fun fetchNews(query: String, hideKeyBoard: () -> Unit) {
-        hideKeyBoard()
-//        viewModelScope.launch {
-//            searchNews.execute(SearchNewsParams(query, Date().from))
-//                .map { news ->
-//                    if (news.isNullOrEmpty().not()) {
-//                        setState(NewsUiState.Success(news))
-//                    } else {
-//                        setState(NewsUiState.Empty)
-//                    }
-//                }.onStart {
-//                    setState(NewsUiState.Loading)
-//
-//                }.catch { error ->
-//                    println("Throwable from fetching movie news is $error")
-//                    setState(NewsUiState.Error(error.message ?: ""))
-//
-//                }.collect {}
-//        }
+        newsRepository.searchNews(query, "")
+            .onStart {
+                hideKeyBoard.invoke()
+                _searchResultState.value = SearchScreenResult.Loading
+            }
+            .onEach { news ->
+                _searchResultState.value = SearchScreenResult.Success(news)
+            }
+            .catch { throwable ->
+                val errorMessage = throwable.message ?: "Nothing found for that search query, please search for something else"
+                _searchResultState.value = SearchScreenResult.Failure(errorMessage)
+            }
+            .launchIn(viewModelScope)
     }
+}
+
+sealed class SearchScreenResult {
+    object Idle : SearchScreenResult()
+    object Loading : SearchScreenResult()
+    data class Success(val searchResults: List<News>) : SearchScreenResult()
+    data class Failure(val errorMessage: String) : SearchScreenResult()
 }

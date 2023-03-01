@@ -6,6 +6,7 @@ import androidx.room.Transaction
 import com.techkingsley.cache.dao.base.BaseDao
 import com.techkingsley.cache.entities.CacheNews
 import kotlinx.coroutines.flow.Flow
+import java.util.*
 
 @Dao
 interface NewsDao : BaseDao<CacheNews> {
@@ -13,11 +14,11 @@ interface NewsDao : BaseDao<CacheNews> {
     @get:Query("SELECT * FROM CacheNews")
     val observeNews: Flow<List<CacheNews>>
 
-    @Query("SELECT * FROM CacheNews WHERE newsCategory = :category LIMIT 10")
-    suspend fun getNewsByCategory(category: String): List<CacheNews>
+    @Query("SELECT * FROM CacheNews WHERE newsCategory = :category LIMIT :limit")
+    suspend fun getNewsByCategory(category: String, limit: Int = 20): List<CacheNews>
 
-    @Query("SELECT * FROM CacheNews WHERE newsCategory = :category LIMIT 10")
-    fun observeNewsByCategory(category: String): Flow<List<CacheNews>>
+    @Query("SELECT * FROM CacheNews WHERE newsCategory = :category LIMIT :limit")
+    fun observeNewsByCategory(category: String, limit: Int = 20): Flow<List<CacheNews>>
 
     @Query("DELETE FROM CacheNews")
     suspend fun deleteAllNews()
@@ -33,16 +34,13 @@ interface NewsDao : BaseDao<CacheNews> {
         insertAll(news + getBookmarkedNews())
     }
 
-    @Query("update CacheNews set isBookmarked = :isBookmarked where id = :id")
-    suspend fun toggleNewsBookmarkStatus(isBookmarked: Boolean, id: Long)
-
     @Query("DELETE FROM CacheNews WHERE id = :id")
     suspend fun deleteNewsById(id: Long)
 
-    @Query("select * from CacheNews where isBookmarked = :isBookmarked")
+    @Query("select * from CacheNews where isBookmarked = :isBookmarked order by bookmarkedTimestamp")
     fun observeBookmarkedNews(isBookmarked: Boolean = true): Flow<List<CacheNews>>
 
-    @Query("select * from CacheNews where isBookmarked = :isBookmarked")
+    @Query("select * from CacheNews where isBookmarked = :isBookmarked order by bookmarkedTimestamp")
     suspend fun getBookmarkedNews(isBookmarked: Boolean = true): List<CacheNews>
 
     @Query("delete from CacheNews where isBookmarked = :isBookmarked")

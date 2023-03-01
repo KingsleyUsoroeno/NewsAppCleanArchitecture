@@ -16,7 +16,8 @@ class NewsMapper @Inject constructor() : EntityMapper<News, NewsEntity> {
             newsUrl = type.newsUrl,
             urlToImage = type.urlToImage,
             id = type.id,
-            isBookmarked = type.isBookmarked
+            isBookmarked = type.isBookmarked,
+            bookmarkedTimestamp = type.bookmarkedTimestamp
         )
     }
 
@@ -29,7 +30,8 @@ class NewsMapper @Inject constructor() : EntityMapper<News, NewsEntity> {
             newsUrl = type.newsUrl,
             urlToImage = type.urlToImage,
             isBookmarked = type.isBookmarked,
-            id = type.id
+            id = type.id,
+            bookmarkedTimestamp = type.bookmarkedTimestamp
         )
     }
 }

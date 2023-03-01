@@ -1,8 +1,10 @@
 package com.techkingsley.cache.repository.news
 
 import com.techkingsley.cache.NewsDatabase
-import com.techkingsley.cache.mappers.CacheMappers
+import com.techkingsley.cache.mappers.CacheNewsMapper
+import com.techkingsley.cache.mappers.CacheSearchResultMapper
 import com.techkingsley.data.contract.cache.CacheNewsRepository
+import com.techkingsley.data.mapper.SearchedNewsMapper
 import com.techkingsley.data.model.NewsEntity
 import com.techkingsley.data.model.SearchHistoryEntity
 import kotlinx.coroutines.CoroutineDispatcher
@@ -13,7 +15,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CacheNewsRepositoryImpl @Inject constructor(
-    private val cacheMappers: CacheMappers,
+    private val newsMapper: CacheNewsMapper = CacheNewsMapper(),
+    private val searchResultMapper: CacheSearchResultMapper = CacheSearchResultMapper(),
     private val newsDatabase: NewsDatabase,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : CacheNewsRepository {
@@ -21,18 +24,19 @@ class CacheNewsRepositoryImpl @Inject constructor(
     private val searchHistoryDao by lazy { newsDatabase.searchHistoryDao() }
     private val newsDao by lazy { newsDatabase.newsDao() }
 
-    override fun getSearchHistory(): Flow<List<SearchHistoryEntity>> {
-        return searchHistoryDao.observeSearchHistory().map { cachedSearchHistory ->
-            cachedSearchHistory.map { cacheMappers.searchResultMapper.mapFromCached(it) }
-        }
+    override fun observeSearchHistory(): Flow<List<SearchHistoryEntity>> {
+        return searchHistoryDao.observeSearchHistory().map { searchResultMapper.mapToEntityList(it) }
     }
 
     override val newsObserver: Flow<List<NewsEntity>>
-        get() = newsDao.observeNews.map { cacheMappers.newsMapper.mapToEntityList(it) }
+        get() = newsDao.observeNews.map { newsMapper.mapToEntityList(it) }
+
+
+    override suspend fun hasCachedNewsInDb(): Boolean = newsDao.getTotalNewsCount() > 0
 
     override fun observeAllNews(category: String): Flow<List<NewsEntity>> {
         return newsDao.observeNewsByCategory(category).map {
-            cacheMappers.newsMapper.mapToEntityList(it)
+            newsMapper.mapToEntityList(it)
         }
     }
 
@@ -47,7 +51,8 @@ class CacheNewsRepositoryImpl @Inject constructor(
                     newsUrl = it.newsUrl,
                     author = it.author,
                     category = it.category,
-                    urlToImage = it.urlToImage
+                    urlToImage = it.urlToImage,
+                    bookmarkedTimestamp = it.bookmarkedTimestamp
                 )
             }
         }
@@ -55,19 +60,19 @@ class CacheNewsRepositoryImpl @Inject constructor(
 
     override suspend fun addSearchHistory(searchHistory: SearchHistoryEntity) {
         withContext(ioDispatcher) {
-            searchHistoryDao.insert(cacheMappers.searchResultMapper.mapToCached(searchHistory))
+            searchHistoryDao.insert(searchResultMapper.mapToCached(searchHistory))
         }
     }
 
     override suspend fun deleteSearchHistory(searchHistory: SearchHistoryEntity) {
         withContext(ioDispatcher) {
-            searchHistoryDao.delete(cacheMappers.searchResultMapper.mapToCached(searchHistory))
+            searchHistoryDao.delete(searchResultMapper.mapToCached(searchHistory))
         }
     }
 
     override suspend fun insertNews(newsEntity: List<NewsEntity>) {
         withContext(ioDispatcher) {
-            newsDao.insertAll(cacheMappers.newsMapper.mapToCacheList(newsEntity))
+            newsDao.insertAll(newsMapper.mapToCacheList(newsEntity))
         }
     }
 
@@ -77,27 +82,30 @@ class CacheNewsRepositoryImpl @Inject constructor(
         withContext(ioDispatcher) { newsDao.deleteNewsById(newsId) }
     }
 
-    override suspend fun bookMarkNews(newsId: Long) {
-        withContext(ioDispatcher) { newsDao.toggleNewsBookmarkStatus(true, newsId) }
-    }
-
-    override suspend fun removeNewsBookmarkStatus(newsId: Long) {
-        withContext(ioDispatcher) { newsDao.toggleNewsBookmarkStatus(false, newsId) }
-    }
-
-    override fun getAllBookMarkedNews(): Flow<List<NewsEntity>> {
-        return newsDao.observeBookmarkedNews().map { cacheNewsEntities ->
-            cacheMappers.newsMapper.mapToEntityList(cacheNewsEntities)
+    override suspend fun bookMarkNews(news: NewsEntity) {
+        withContext(ioDispatcher) {
+            var cacheNewsEntity = newsMapper.mapToCached(news)
+            cacheNewsEntity = cacheNewsEntity.copy(isBookmarked = true, bookmarkedTimestamp = news.bookmarkedTimestamp)
+            newsDao.insert(cacheNewsEntity)
         }
     }
+
+    override suspend fun removeNewsBookmarkStatus(news: NewsEntity) {
+        withContext(ioDispatcher) {
+            var cacheNewsEntity = newsMapper.mapToCached(news)
+            cacheNewsEntity = cacheNewsEntity.copy(isBookmarked = false, bookmarkedTimestamp = news.bookmarkedTimestamp)
+            newsDao.insert(cacheNewsEntity)
+        }
+    }
+
+    override val observeAllBookmarkedNews: Flow<List<NewsEntity>>
+        get() = newsDao.observeBookmarkedNews().map { cacheNewsEntities ->
+            newsMapper.mapToEntityList(cacheNewsEntities)
+        }
 
     override suspend fun getNewsByCategory(newsCategory: String): List<NewsEntity> {
         return newsDao.getNewsByCategory(newsCategory).map { cacheNewsEntities ->
-            cacheMappers.newsMapper.mapFromCached(cacheNewsEntities)
+            newsMapper.mapFromCached(cacheNewsEntities)
         }
-    }
-
-    override suspend fun getTotalNewsCount(): Int {
-        return newsDao.getTotalNewsCount()
     }
 }

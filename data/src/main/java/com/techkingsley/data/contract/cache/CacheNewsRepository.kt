@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CacheNewsRepository {
 
-    fun getSearchHistory(): Flow<List<SearchHistoryEntity>>
+    fun observeSearchHistory(): Flow<List<SearchHistoryEntity>>
 
     fun observeAllNews(category: String): Flow<List<NewsEntity>>
 
@@ -23,15 +23,15 @@ interface CacheNewsRepository {
 
     suspend fun deleteNews(newsId: Long)
 
-    suspend fun bookMarkNews(newsId: Long)
+    suspend fun bookMarkNews(news: NewsEntity)
 
-    suspend fun removeNewsBookmarkStatus(newsId: Long)
+    suspend fun removeNewsBookmarkStatus(news: NewsEntity)
 
-    fun getAllBookMarkedNews(): Flow<List<NewsEntity>>
+    val observeAllBookmarkedNews: Flow<List<NewsEntity>>
 
     suspend fun getNewsByCategory(newsCategory: String): List<NewsEntity>
 
-    suspend fun getTotalNewsCount(): Int
-
     val newsObserver: Flow<List<NewsEntity>>
+
+    suspend fun hasCachedNewsInDb() : Boolean
 }
